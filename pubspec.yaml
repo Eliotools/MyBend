@@ -11,10 +11,40 @@ environment:
 
 dependencies:
   flutter:
-    sdk: flutter
-  flutter_localizations:
-    sdk: flutter
 
+    sdk: flutter
+  wyatt_bloc_helper:
+    hosted: https://git.wyatt-studio.fr/api/packages/Wyatt-FOSS/pub/
+    version: ^2.0.2
+  wyatt_architecture:
+    hosted: https://git.wyatt-studio.fr/api/packages/Wyatt-FOSS/pub/
+    version: 0.2.0+1
+  wyatt_type_utils:
+    hosted: https://git.wyatt-studio.fr/api/packages/Wyatt-FOSS/pub/
+    version: 0.0.5
+  wyatt_component_copy_with_extension:
+    hosted: https://git.wyatt-studio.fr/api/packages/Wyatt-FOSS/pub
+    version: 2.0.1
+  wyatt_ui_components:
+    hosted: https://git.wyatt-studio.fr/api/packages/Wyatt-FOSS/pub
+    version: 0.3.0+2
+  wyatt_ui_layout:
+    hosted: https://git.wyatt-studio.fr/api/packages/Wyatt-FOSS/pub
+    version: 0.1.2+3
+  wyatt_bloc_layout:
+    hosted: https://git.wyatt-studio.fr/api/packages/Wyatt-FOSS/pub
+    version: ^0.1.2+6
+  wyatt_crud_bloc:
+    hosted: https://git.wyatt-studio.fr/api/packages/Wyatt-FOSS/pub
+    version: ^0.2.0
+  flutter_bloc: ^8.1.6
+  get_it: ^7.7.0
+  go_router: ^13.2.0
+  gap: ^3.0.1
+  equatable: ^2.0.5
+  flutter_ringtone_player: ^4.0.0+3
+  localstorage: ^5.0.0
+  intl: ^0.18.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -30,3 +60,11 @@ flutter:
   assets:
     # Add assets from the images directory to the application.
     - assets/images/
+    - assets/sprites/lvl-1/
+    - assets/sprites/lvl-2/
+    - assets/sprites/lvl-3/
+    - assets/sprites/lvl-4/
+    - assets/sprites/lvl-5/
+    - assets/sprites/lvl-6/
+    - assets/sprites/lvl-7/
+    - assets/sprites/lvl-8/
