@@ -2,19 +2,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mybend/src/enum/local_storage_key_enum.dart';
 import 'package:mybend/src/features/activity/activity_page.dart';
-import 'package:mybend/src/features/home/home_cubit.dart';
+import 'package:mybend/src/features/modale/create_sessions_modale.dart';
+import 'package:mybend/src/features/modale/create_activity_modale.dart';
 import 'package:mybend/src/helpers/helper.dart';
+import 'package:mybend/src/features/bloc/local_storage_bloc.dart';
+import 'package:mybend/src/helpers/local_storage_bloc.dart';
 import 'package:mybend/src/model/activity.dart';
-import 'package:mybend/src/model/session.dart';
 import 'package:mybend/src/shared/extentions.dart';
-import 'package:wyatt_type_utils/wyatt_type_utils.dart';
 
 class ExerciceContainer extends StatefulWidget {
   const ExerciceContainer(
-      {super.key, required this.exercices, required this.action});
+      {super.key, required this.exercices});
 
-  final void Function(Object activity) action;
+  
   final List<Activity> exercices;
 
   @override
@@ -68,26 +70,26 @@ class _ExerciceContainerState extends State<ExerciceContainer> {
               Row(
                 children: [
                   CupertinoButton(
-                      onPressed: () => showDialog(
+                      onPressed: () async => showDialog(
                           context: context,
                           builder: (context) => Dialog(
                               insetPadding: const EdgeInsets.all(8),
                               backgroundColor: context.them.colorScheme.surface,
-                              child: AddActivityModal(
-                                action: widget.action,
-                              ))),
+                              child: const CreateActivityModale())),
                       child: const Icon(Icons.add)),
                   CupertinoButton(
-                      onPressed: () => showDialog(
+                      onPressed: () async => selected.isEmpty
+                          ? null
+                          : showDialog(
                           context: context,
                           builder: (context) => Dialog(
                               insetPadding: const EdgeInsets.all(8),
                               backgroundColor: context.them.colorScheme.surface,
-                              child: CreateSessions(
-                                action: widget.action,
-                                list: selected,
-                              ))),
-                      child: const Icon(Icons.inventory)),
+                                  child: CreateSessions(list: selected))),
+                      child: Icon(
+                        Icons.inventory,
+                        color: selected.isEmpty ? Colors.grey : Colors.white,
+                      )),
                 ],
               ),
               CupertinoButton(
@@ -98,88 +100,23 @@ class _ExerciceContainerState extends State<ExerciceContainer> {
                   onPressed: () => selected.isEmpty
                       ? null
                       : context
-                          .pushNamed(
-                            ActivityPage.name,
-                            extra: selected,
-                          )
-                          .then((e) => context.read<HomeCubit>().addHistory(
-                              'Exercices',
-                              selected
-                                      .map((e) => e.time)
-                                      .reduce((a, b) => a + b) ~/
-                                  6))),
+                          .pushNamed(ActivityPage.name, extra: selected)
+                          .then((value) {
+                          final time = selected
+                              .map((e) => e.time)
+                              .reduce((a, b) => a + b);
+                          LocalStorageHelper.addItem(
+                              LocalStorageKeyEnum.history, {
+                            'name': 'Exercice',
+                            'time': time,
+                            'date': DateTime.now().millisecondsSinceEpoch,
+                          });
+                          LocalStorageHelper.addIntItem(
+                              LocalStorageKeyEnum.xp, time ~/ 6);
+                          context.read<LocalStorageBloc>().getItems();
+                        })),
             ],
-          ),
+          )
         ],
       );
-}
-
-class AddActivityModal extends StatefulWidget {
-  const AddActivityModal({super.key, required this.action});
-  final void Function(Object data) action;
-
-  @override
-  State<AddActivityModal> createState() => _AddActivityModalState();
-}
-
-class _AddActivityModalState extends State<AddActivityModal> {
-  String? activityName;
-  int? activityTime;
-
-  @override
-  Widget build(BuildContext context) => AspectRatio(
-      aspectRatio: 1.5,
-      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        const Text('Ajouter un activié'),
-        TextField(
-          onChanged: (value) => setState(() => activityName = value),
-          decoration: const InputDecoration(hintText: 'Nom'),
-        ),
-        TextField(
-          keyboardType: TextInputType.number,
-          onChanged: (value) => setState(() => activityTime = int.parse(value)),
-          decoration: const InputDecoration(hintText: 'Durée'),
-        ),
-        if (activityName.isNotNullOrEmpty && activityTime.isNotNull)
-          CupertinoButton(
-              child: const Text('Ajouter'),
-              onPressed: () {
-                widget.action(
-                  Activity(name: activityName!, time: activityTime!),
-                );
-                context.pop();
-              }),
-      ]));
-}
-
-class CreateSessions extends StatefulWidget {
-  const CreateSessions({super.key, required this.action, required this.list});
-  final void Function(Object data) action;
-  final List<Activity> list;
-
-  @override
-  State<CreateSessions> createState() => CcreateSessionsState();
-}
-
-class CcreateSessionsState extends State<CreateSessions> {
-  String? name;
-  @override
-  Widget build(BuildContext context) => AspectRatio(
-      aspectRatio: 1.5,
-      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        const Text('Créer une sessions'),
-        TextField(
-          onChanged: (value) => setState(() => name = value),
-          decoration: const InputDecoration(hintText: 'Nom'),
-        ),
-        if (name.isNotNullOrEmpty)
-          CupertinoButton(
-              child: const Text('Ajouter'),
-              onPressed: () {
-                widget.action(
-                  Session(name: name!, list: widget.list),
-                );
-                context.pop();
-              }),
-      ]));
 }

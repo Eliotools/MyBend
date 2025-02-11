@@ -1,10 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:localstorage/localstorage.dart';
+import 'package:mybend/src/enum/local_storage_key_enum.dart';
+import 'package:mybend/src/features/bloc/local_storage_bloc.dart';
+import 'package:mybend/src/helpers/local_storage_bloc.dart';
 import 'package:mybend/src/model/activity.dart';
 
 class ActivityContent extends StatefulWidget {
@@ -26,6 +29,7 @@ class _ActivityContentState extends State<ActivityContent> {
   void nextPage(int index) {
     Future.delayed(Duration(seconds: widget.list[index].time + 5), () async {
       if (mounted) {
+        print('check mounted');
         setState(() => current = widget.list[index]);
         if (index < widget.list.length - 1) {
           FlutterRingtonePlayer().play(
@@ -49,10 +53,19 @@ class _ActivityContentState extends State<ActivityContent> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    print('change');
+  }
+
+  @override
   void initState() {
     super.initState();
     nextPage(0);
-    lvl = int.parse(localStorage.getItem('xp')!) ~/ 1000;
+    lvl = (int.tryParse(LocalStorageHelper.getItemOrNull(LocalStorageKeyEnum.xp)
+                .toString()) ??
+            0) ~/
+        1000;
     time = Timer.periodic(
         const Duration(milliseconds: 1), (_) => setState(() => duration += 1));
     current = widget.list.first;

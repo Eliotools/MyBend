@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mybend/src/features/activity/activity_page.dart';
 import 'package:mybend/src/features/history/history_page.dart';
 import 'package:mybend/src/features/home/home_screen.dart';
+import 'package:mybend/src/features/settings/settings_screen.dart';
 import 'package:mybend/src/model/activity.dart';
 
 class AppRouter {
@@ -42,12 +43,12 @@ class AppRouter {
         navigatorKey: navigatorKey,
         routes: [
           GoRoute(
-            name: HomeScreen.name,
+            name: HomePage.name,
             path: '/',
             pageBuilder: (context, state) => noTransition(
               context,
               state,
-              const HomeScreen(),
+              const HomePage(),
             ),
           ),
           GoRoute(
@@ -66,6 +67,15 @@ class AppRouter {
               context,
               state,
               const HistoryPage(),
+            ),
+          ),
+          GoRoute(
+            name: SettingsPage.name,
+            path: '/${SettingsPage.name}',
+            pageBuilder: (context, state) => noTransition(
+              context,
+              state,
+              const SettingsPage(),
             ),
           ),
         ],

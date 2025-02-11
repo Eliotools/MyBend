@@ -1,34 +1,32 @@
-import 'package:equatable/equatable.dart';
 
-class HomeState extends Equatable {
-  @override
+class BendState {
+  
   @override
   String toString() => switch (this) {
-        HomeInitial() => 'Initital',
-        HomeLoading() => 'Loading',
-        HomeLoginIn() => 'login',
-        HomeLoaded(data: final data) => 'LOADED(${data.toString()})',
-        HomeError(message: final message) => 'Error($message)',
-        HomeState() => 'Base',
+        BendInitial() => 'Initital',
+        BendLoading() => 'Loading',
+        BendLoginIn() => 'login',
+        BendLoaded(data: final data) => 'LOADED(${data.toString()})',
+        BendError(message: final message) => 'Error($message)',
+        BendState() => 'Base',
       };
-  @override
-  List<Object?> get props => throw UnimplementedError();
+
 }
 
-class HomeInitial extends HomeState {}
+class BendInitial extends BendState {}
 
-class HomeLoading extends HomeState {}
+class BendLoading extends BendState {}
 
-class HomeLoginIn extends HomeState {}
+class BendLoginIn extends BendState {}
 
-class HomeLoaded<T> extends HomeState {
-  HomeLoaded({required this.data});
+class BendLoaded<T> extends BendState {
+  BendLoaded({required this.data});
 
   final T data;
 }
 
-class HomeError extends HomeState {
-  HomeError({required this.message});
+class BendError extends BendState {
+  BendError({required this.message});
 
   final String message;
 }
