@@ -1,17 +1,13 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart' show DateFormat;
-import 'package:mybend/src/enum/local_storage_key_enum.dart';
+import 'package:flutter/material.dart';
 
 import 'package:mybend/src/features/bloc/local_storage_bloc.dart';
-import 'package:mybend/src/helpers/local_storage_helper.dart';
+import 'package:mybend/src/features/history/history_calendar_tab.dart';
+import 'package:mybend/src/features/history/history_graph_tab.dart';
+import 'package:mybend/src/features/history/history_list_tab.dart';
 import 'package:mybend/src/model/data_dto.dart';
 import 'package:mybend/src/model/home_state.dart';
 import 'package:mybend/src/shared/base_page.dart';
-import 'package:mybend/src/shared/container.dart';
-import 'package:wyatt_type_utils/wyatt_type_utils.dart';
 
-final dateFormat = DateFormat('d/MM');
 
 class HistoryScreen extends BasePage<LocalStorageBloc, BendState> {
   const HistoryScreen({super.key});
@@ -21,41 +17,31 @@ class HistoryScreen extends BasePage<LocalStorageBloc, BendState> {
   @override
   Widget onBuild(BuildContext context, BendState state) => switch (state) {
         BendLoaded<DataDto>(data: final data) => data.history.isNotEmpty
-            ? ListView.builder(
-                itemCount: data.history.length,
-                itemBuilder: (context, index) => CustomContainer(
-                      child: Dismissible(
-                        key: Key(data.history[index].name),
-                        onDismissed: (direction) {
-                          LocalStorageHelper.removeIndex(
-                              LocalStorageKeyEnum.history, index);
-                          LocalStorageHelper.calcXP();
-                          context.read<LocalStorageBloc>().getItems();
-                        },
-                        child: Row(
-                          children: [
-                            Row(
-                  children: [
-                              const Text('Le '),
-                              data.history[index].date.isNotNull
-                                  ? Text(dateFormat
-                                      .format(data.history[index].date!))
-                                  : const Text('/'),
-                            ],
-                ),
-                Expanded(
-                  child: Column(
+            //implement tab bar to switch between deferent history view
+            ? DefaultTabController(
+                length: 3,
+                child: Scaffold(
+                  appBar: AppBar(
+                    title: const Text('History'),
+                    bottom: const TabBar(
+                      indicatorColor: Colors.orange,
+                      tabs: [
+                        // TODO(dev): add color origin to active tab
+
+                        Tab(icon: Icon(Icons.list)),
+                        Tab(icon: Icon(Icons.bar_chart)),
+                        Tab(icon: Icon(Icons.calendar_month)),
+                      ],
+                    ),
+                  ),
+                  body: TabBarView(
                     children: [
-                                Text(data.history[index].name),
-                                Text(data.history[index].time?.toString() ??
-                                    'nul'),
+                      HistoryListTab(data: data.history),
+                      HistoryGraphTab(data: data.history),
+                      HistoryCalendarTab(data: data.history),
                     ],
                   ),
-                ),
-                          ],
-                        ),
-                      ),
-                    ))
+                ))
             : const Text('No History'),
         BendState() => const Text('No History'),
       };
