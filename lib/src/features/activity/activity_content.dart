@@ -86,16 +86,32 @@ class _ActivityContentState extends State<ActivityContent> {
                 children: [
                   Text(
                     e.name,
+                    style: const TextStyle(
+                      fontSize: 40,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
+                  const Gap(12),
                   Text(
                     '${e.time}s',
+                    style: const TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                  const Gap(30),
+                  const Gap(45),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
                       children: [
                         Image.asset('assets/sprites/lvl-${lvl + 1}/side.gif'),
+                        Text(
+                          '${(duration / 1000).toStringAsFixed(2)}s',
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                         LinearProgressIndicator(
                           value: (duration / 1000) / (current.time - 1),
                           color: Colors.orange,

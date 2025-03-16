@@ -65,12 +65,14 @@ class HomePage extends BasePage<LocalStorageBloc, BendState> {
               ),
               CustomContainer(
                   child: ExpansionTile(
+                collapsedIconColor: Colors.orange,
                 title: const Text('Exercices'),
                 children: [
                 ExerciceContainer(exercices: data.exercices)],
               )),
               CustomContainer(
                   child: ExpansionTile(
+                collapsedIconColor: Colors.orange,
                 title: const Text('Sessions'),
                 children: [SessionContainer(sessions: data.sessions)],
               )),
