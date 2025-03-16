@@ -24,10 +24,10 @@ class HistoryScreen extends BasePage<LocalStorageBloc, BendState> {
                   appBar: AppBar(
                     title: const Text('History'),
                     bottom: const TabBar(
+                      indicatorWeight: 5,
+                      dividerColor: Colors.orange,
                       indicatorColor: Colors.orange,
                       tabs: [
-                        // TODO(dev): add color origin to active tab
-
                         Tab(icon: Icon(Icons.list)),
                         Tab(icon: Icon(Icons.bar_chart)),
                         Tab(icon: Icon(Icons.calendar_month)),
