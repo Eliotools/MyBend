@@ -30,7 +30,6 @@ class LocalStorageHelper {
       localStorage.removeItem(key.name);
 
   static void addIntItem(LocalStorageKeyEnum key, int value) {
-    print('check, $value');
     final data = (int.tryParse(getItemOrNull(key).toString()) ?? 0);
     setItem(key, data + value);
   }

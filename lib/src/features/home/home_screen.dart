@@ -6,12 +6,13 @@ import 'package:intl/intl.dart' show DateFormat;
 import 'package:flutter/material.dart';
 import 'package:mybend/src/features/bloc/local_storage_bloc.dart';
 import 'package:mybend/src/features/history/history_page.dart';
+import 'package:mybend/src/features/home/current_container.dart';
 import 'package:mybend/src/features/home/exercices_container.dart';
 import 'package:mybend/src/features/home/login_content.dart';
 import 'package:mybend/src/features/home/sessions_container.dart';
 import 'package:mybend/src/features/modale/add_activity_modale.dart';
 import 'package:mybend/src/features/settings/settings_screen.dart';
-import 'package:mybend/src/helpers/local_storage_bloc.dart';
+import 'package:mybend/src/helpers/local_storage_helper.dart';
 import 'package:mybend/src/model/data_dto.dart';
 import 'package:mybend/src/model/home_state.dart';
 import 'package:mybend/src/shared/base_page.dart';
@@ -51,14 +52,13 @@ class HomePage extends BasePage<LocalStorageBloc, BendState> {
                           Text('Total XP : ${(data.xp % 1000).round()}'),
                           Text('Level : ${data.xp ~/ 1000}')
                         ]),
-                    data.last.isNotNull
+                    data.history.isNotEmpty
                         ? Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                                 const Text('Dernère Séance '),
                                 Text(dateFormat.format(
-                                    DateTime.fromMillisecondsSinceEpoch(
-                                        data.last!)))
+                                    data.history.last.date!))
                               ])
                         : const Text('Premère séance')
                   ],
@@ -75,6 +75,8 @@ class HomePage extends BasePage<LocalStorageBloc, BendState> {
                 title: const Text('Sessions'),
                 children: [SessionContainer(sessions: data.sessions)],
               )),
+              CurrentContainer(current: data.current),
+             
               CustomContainer(
                   child: CupertinoButton(
                 onPressed: () async => showDialog(
@@ -87,7 +89,7 @@ class HomePage extends BasePage<LocalStorageBloc, BendState> {
               )),
               CustomContainer(
                   child: CupertinoButton(
-                onPressed: () => context.pushNamed(HistoryPage.name),
+                onPressed: () => context.pushNamed(HistoryScreen.name),
                 child: const Text("Voir l'historique"),
               )),
               Row(children: [

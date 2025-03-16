@@ -61,12 +61,12 @@ class AppRouter {
             ),
           ),
           GoRoute(
-            name: HistoryPage.name,
-            path: '/${HistoryPage.name}',
+            name: HistoryScreen.name,
+            path: '/${HistoryScreen.name}',
             pageBuilder: (context, state) => noTransition(
               context,
               state,
-              const HistoryPage(),
+              const HistoryScreen(),
             ),
           ),
           GoRoute(

@@ -8,7 +8,7 @@ import 'package:mybend/src/features/modale/create_sessions_modale.dart';
 import 'package:mybend/src/features/modale/create_activity_modale.dart';
 import 'package:mybend/src/helpers/helper.dart';
 import 'package:mybend/src/features/bloc/local_storage_bloc.dart';
-import 'package:mybend/src/helpers/local_storage_bloc.dart';
+import 'package:mybend/src/helpers/local_storage_helper.dart';
 import 'package:mybend/src/model/activity.dart';
 import 'package:mybend/src/shared/extentions.dart';
 

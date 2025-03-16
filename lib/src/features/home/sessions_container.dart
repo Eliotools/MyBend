@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mybend/src/enum/local_storage_key_enum.dart';
 import 'package:mybend/src/features/activity/activity_page.dart';
 import 'package:mybend/src/features/bloc/local_storage_bloc.dart';
-import 'package:mybend/src/helpers/local_storage_bloc.dart';
+import 'package:mybend/src/helpers/local_storage_helper.dart';
 import 'package:mybend/src/model/session.dart';
 import 'package:wyatt_type_utils/wyatt_type_utils.dart';
 
