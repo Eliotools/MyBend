@@ -32,15 +32,38 @@ class HomePage extends BasePage<LocalStorageBloc, BendState> {
         BendLoaded<DataDto>(data: final data) => ListView(
             physics: const BouncingScrollPhysics(),
             children: [
+            
               CustomContainer(
-                child: Column(
+                child: Row(
+                  children: [
+                    Expanded(
+                        child: data.history.isNotEmpty
+                            ? Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                    const Text('Dernère Séance '),
+                                    Text(dateFormat
+                                        .format(data.history.last.date!))
+                                  ])
+                            : const Text('Premère séance')),
+                    Column(
                   children: [
                     Text('Bonjour ${data.name}'),
                     Image.asset(
-                        'assets/sprites/lvl-${(data.xp ~/ 1000) + 1}/front.gif')
+                            'assets/sprites/lvl-${(data.xp ~/ 1000) + 1}/front.gif'),
+                      ],
+                    ),
+                    Expanded(
+                        child: Column(
+                      children: [
+                        const Text('Current streak'),
+                        Text('${data.streak?.streak ?? 0}'),
+                      ],
+                    )),
                   ],
                 ),
               ),
+                 
               CustomContainer(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -51,15 +74,7 @@ class HomePage extends BasePage<LocalStorageBloc, BendState> {
                           Text('Total XP : ${(data.xp % 1000).round()}'),
                           Text('Level : ${data.xp ~/ 1000}')
                         ]),
-                    data.history.isNotEmpty
-                        ? Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                                const Text('Dernère Séance '),
-                                Text(dateFormat.format(
-                                    data.history.last.date!))
-                              ])
-                        : const Text('Premère séance')
+                 
                   ],
                 ),
               ),
@@ -94,17 +109,11 @@ class HomePage extends BasePage<LocalStorageBloc, BendState> {
                 child: const Text("Voir l'historique"),
               )),
               Row(children: [
-                CupertinoButton(
-                  onPressed: () {
-                    LocalStorageHelper.clear();
-                    context.read<LocalStorageBloc>().getItems();
-                  },
-                  child: const Icon(Icons.clear),
-                ),
+            
                 CupertinoButton(
                   onPressed: () => context.pushNamed(SettingsPage.name),
                   child: const Icon(Icons.settings),
-                )
+                ),
               ])
             ],
           ),

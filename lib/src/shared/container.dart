@@ -7,7 +7,6 @@ class CustomContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-        width: double.infinity,
         padding: const EdgeInsets.all(8),
         margin: const EdgeInsets.all(8),
         decoration: BoxDecoration(

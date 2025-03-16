@@ -7,6 +7,7 @@ import 'package:mybend/src/model/data_dto.dart';
 import 'package:mybend/src/model/history.dart';
 import 'package:mybend/src/model/home_state.dart';
 import 'package:mybend/src/model/session.dart';
+import 'package:mybend/src/model/streak.dart';
 import 'package:wyatt_type_utils/wyatt_type_utils.dart';
 
 class LocalStorageBloc extends Cubit<BendState> {
@@ -49,6 +50,10 @@ class LocalStorageBloc extends Cubit<BendState> {
           current: Activity.fromJsonOrNull((LocalStorageHelper.getItemOrNull(
               LocalStorageKeyEnum.current,
               parse: true) as Map<String, Object?>?)),
+          streak: Streak.fromJsonOrNull(
+              (LocalStorageHelper.getItemOrNull(
+                  LocalStorageKeyEnum.streak,
+                  parse: true) as Map<String, Object?>?)),
         ),
       ),
     );

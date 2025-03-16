@@ -5,4 +5,5 @@ enum LocalStorageKeyEnum {
   xp,
   history,
   current,
+  streak,
 }

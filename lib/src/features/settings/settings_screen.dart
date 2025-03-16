@@ -74,7 +74,31 @@ class SettingsPage extends BasePage<LocalStorageBloc, BendState> {
                         }),
               ],
             ),
-          )
+              ),
+              CustomContainer(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const Text('Streak'),
+                    const Gap(10),
+                    Text(data.streak?.streak.toString() ?? '0'),
+                    CupertinoButton(
+                        child: const Icon(Icons.refresh),
+                        onPressed: () {
+                          LocalStorageHelper.clearItem(
+                              LocalStorageKeyEnum.streak);
+                          context.read<LocalStorageBloc>().getItems();
+                        }),
+                  ],
+                ),
+              ),
+              CupertinoButton(
+                onPressed: () {
+                  LocalStorageHelper.clear();
+                  context.read<LocalStorageBloc>().getItems();
+                },
+                child: const Icon(Icons.clear),
+              ),
         ],
           ),
         _ => const SizedBox.shrink()

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:localstorage/localstorage.dart';
 import 'package:mybend/src/enum/local_storage_key_enum.dart';
+import 'package:mybend/src/model/streak.dart';
 import 'package:wyatt_type_utils/wyatt_type_utils.dart';
 
 class LocalStorageHelper {
@@ -32,6 +33,7 @@ class LocalStorageHelper {
   static void addIntItem(LocalStorageKeyEnum key, int value) {
     final data = (int.tryParse(getItemOrNull(key).toString()) ?? 0);
     setItem(key, data + value);
+    addStreak();
   }
 
   static void calcXP() {
@@ -48,6 +50,27 @@ class LocalStorageHelper {
       return a;
     });
     setItem(LocalStorageKeyEnum.xp, xp ~/ 6);
+  }
+
+  static void addStreak() {
+    Streak? streak = Streak.fromJsonOrNull(
+        getItemOrNull(LocalStorageKeyEnum.streak, parse: true)
+            as Map<String, Object?>?);
+    if (streak.isNull) {
+      streak = Streak(date: DateTime.now(), streak: 1);
+    } else {
+      final lastDayMidNight = DateTime.now()
+        ..setHour(0)
+        ..setMinute(0)
+        ..setSecond(0)
+        ..setMillisecond(0);
+      if (streak!.date.isBefore(lastDayMidNight)) {
+        streak = Streak(date: DateTime.now(), streak: 1);
+      } else {
+        streak.streak++;
+      }
+    }
+    setItem(LocalStorageKeyEnum.streak, streak.toJson());
   }
 
   static void removeIndex(LocalStorageKeyEnum key, int index) {
