@@ -34,5 +34,27 @@ class LocalStorageHelper {
     setItem(key, data + value);
   }
 
+  static void calcXP() {
+    final history =
+        getItemOrNull(LocalStorageKeyEnum.history, parse: true) as List? ?? [];
+    final xp = history.map((e) => e['time']).reduce((a, b) {
+      if (b is String) {
+        return a + int.parse(b);
+      }
+      if (a is int && b is int) {
+        return a + b;
+      }
+
+      return a;
+    });
+    setItem(LocalStorageKeyEnum.xp, xp ~/ 6);
+  }
+
+  static void removeIndex(LocalStorageKeyEnum key, int index) {
+    final list = getItemOrNull(key, parse: true) as List? ?? [];
+    list.removeAt(index);
+    setItem(key, list);
+  }
+
   static void clear() => localStorage.clear();
 }

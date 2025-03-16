@@ -18,7 +18,6 @@ import 'package:mybend/src/model/home_state.dart';
 import 'package:mybend/src/shared/base_page.dart';
 import 'package:mybend/src/shared/container.dart';
 import 'package:mybend/src/shared/extentions.dart';
-import 'package:wyatt_type_utils/wyatt_type_utils.dart';
 
 final dateFormat = DateFormat('d/MM');
 

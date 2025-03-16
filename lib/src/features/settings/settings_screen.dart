@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gap/gap.dart';
 import 'package:mybend/src/enum/local_storage_key_enum.dart';
 import 'package:mybend/src/features/bloc/local_storage_bloc.dart';
 import 'package:mybend/src/helpers/local_storage_helper.dart';
@@ -20,9 +21,10 @@ class SettingsPage extends BasePage<LocalStorageBloc, BendState> {
         children: [
           CustomContainer(
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 const Text('Name'),
+                const Gap(10),
                     Text(data.name ?? '??'),
                     CupertinoButton(
                         child: const Icon(Icons.refresh),
@@ -36,9 +38,10 @@ class SettingsPage extends BasePage<LocalStorageBloc, BendState> {
               ),
               CustomContainer(
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     const Text('XP'),
+                    const Gap(10),
                     Text(data.xp.toString()),
                     CupertinoButton(
                         child: const Icon(Icons.refresh),
@@ -46,16 +49,23 @@ class SettingsPage extends BasePage<LocalStorageBloc, BendState> {
                           LocalStorageHelper.clearItem(LocalStorageKeyEnum.xp);
                           context.read<LocalStorageBloc>().getItems();
                         }),
+                    CupertinoButton(
+                        child: const Icon(Icons.calculate),
+                        onPressed: () {
+                          LocalStorageHelper.calcXP();
+                          context.read<LocalStorageBloc>().getItems();
+                        }),
                   ],
                 ),
               ),
               CustomContainer(
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     const Text('History'),
+                    const Gap(10),
                     Text(data.history.length.toString()),
-                CupertinoButton(
+                    CupertinoButton(
                     child: const Icon(Icons.refresh),
                         onPressed: () {
                           LocalStorageHelper.clearItem(

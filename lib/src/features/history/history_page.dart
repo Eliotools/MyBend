@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart' show DateFormat;
+import 'package:mybend/src/enum/local_storage_key_enum.dart';
 
 import 'package:mybend/src/features/bloc/local_storage_bloc.dart';
+import 'package:mybend/src/helpers/local_storage_helper.dart';
 import 'package:mybend/src/model/data_dto.dart';
 import 'package:mybend/src/model/home_state.dart';
 import 'package:mybend/src/shared/base_page.dart';
@@ -21,9 +24,17 @@ class HistoryScreen extends BasePage<LocalStorageBloc, BendState> {
             ? ListView.builder(
                 itemCount: data.history.length,
                 itemBuilder: (context, index) => CustomContainer(
-                      child: Row(
-              children: [
-                Row(
+                      child: Dismissible(
+                        key: Key(data.history[index].name),
+                        onDismissed: (direction) {
+                          LocalStorageHelper.removeIndex(
+                              LocalStorageKeyEnum.history, index);
+                          LocalStorageHelper.calcXP();
+                          context.read<LocalStorageBloc>().getItems();
+                        },
+                        child: Row(
+                          children: [
+                            Row(
                   children: [
                               const Text('Le '),
                               data.history[index].date.isNotNull
@@ -41,8 +52,9 @@ class HistoryScreen extends BasePage<LocalStorageBloc, BendState> {
                     ],
                   ),
                 ),
-              ],
-            ),
+                          ],
+                        ),
+                      ),
                     ))
             : const Text('No History'),
         BendState() => const Text('No History'),

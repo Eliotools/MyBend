@@ -19,15 +19,40 @@ class CurrentContainer extends StatelessWidget {
   Widget build(BuildContext context) => CustomContainer(
       child: current.isNull
           ? CupertinoButton(
-              child: const Text("Commencer une activité"),
-              onPressed: () => LocalStorageHelper.setItem(
-                  LocalStorageKeyEnum.current,
-                  Activity(
-                          name: 'Current',
-                          time: DateTime.now().millisecondsSinceEpoch)
-                      .toJson()))
+              child: const Row(
+                children: [
+                  Expanded(
+                      child: Text("Commencer une activité",
+                          textAlign: TextAlign.center)),
+                  Icon(
+                    Icons.play_arrow,
+                    color: Colors.orange,
+                  ),
+                ],
+              ),
+              onPressed: () {
+                LocalStorageHelper.setItem(
+                    LocalStorageKeyEnum.current,
+                    Activity(
+                            name: 'Current',
+                            time: DateTime.now().millisecondsSinceEpoch)
+                        .toJson());
+                context.read<LocalStorageBloc>().getItems();
+              })
           : CupertinoButton(
-              child: Text("Stop Current activity ${current!.time}"),
+              child: const Row(
+                children: [
+                  Expanded(
+                      child: Text(
+                    "Stop Current activity",
+                    textAlign: TextAlign.center,
+                  )),
+                  Icon(
+                    Icons.stop,
+                    color: Colors.orange,
+                  ),
+                ],
+              ),
               onPressed: () async => showDialog(
                   context: context,
                   builder: (context) => Dialog(
@@ -39,6 +64,7 @@ class CurrentContainer extends StatelessWidget {
                             1000,
                       ))).then((value) {
                 LocalStorageHelper.clearItem(LocalStorageKeyEnum.current);
+                LocalStorageHelper.calcXP();
                 context.read<LocalStorageBloc>().getItems();
               }),
             ));
