@@ -12,7 +12,6 @@ import 'package:mybend/src/features/home/login_content.dart';
 import 'package:mybend/src/features/home/sessions_container.dart';
 import 'package:mybend/src/features/modale/add_activity_modale.dart';
 import 'package:mybend/src/features/settings/settings_screen.dart';
-import 'package:mybend/src/helpers/local_storage_helper.dart';
 import 'package:mybend/src/model/data_dto.dart';
 import 'package:mybend/src/model/home_state.dart';
 import 'package:mybend/src/shared/base_page.dart';
@@ -80,6 +79,8 @@ class HomePage extends BasePage<LocalStorageBloc, BendState> {
               ),
               CustomContainer(
                   child: ExpansionTile(
+                textColor: Colors.orange,
+                iconColor: Colors.orange,
                 collapsedIconColor: Colors.orange,
                 title: const Text('Exercices'),
                 children: [
@@ -87,6 +88,8 @@ class HomePage extends BasePage<LocalStorageBloc, BendState> {
               )),
               CustomContainer(
                   child: ExpansionTile(
+                textColor: Colors.orange,
+                iconColor: Colors.orange,
                 collapsedIconColor: Colors.orange,
                 title: const Text('Sessions'),
                 children: [SessionContainer(sessions: data.sessions)],
