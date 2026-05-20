@@ -6,4 +6,5 @@ enum LocalStorageKeyEnum {
   history,
   current,
   streak,
+  babel,
 }

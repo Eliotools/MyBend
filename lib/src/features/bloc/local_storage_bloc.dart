@@ -9,6 +9,8 @@ import 'package:mybend/src/model/home_state.dart';
 import 'package:mybend/src/model/session.dart';
 import 'package:mybend/src/model/streak.dart';
 import 'package:wyatt_type_utils/wyatt_type_utils.dart';
+import 'package:mybend/src/model/babel_dto.dart';
+import 'package:mybend/src/model/content.dart';
 
 class LocalStorageBloc extends Cubit<BendState> {
   LocalStorageBloc() : super(BendInitial());
@@ -25,6 +27,11 @@ class LocalStorageBloc extends Cubit<BendState> {
       BendLoaded<DataDto>(
         data: DataDto(
           name: name,
+          babel: (LocalStorageHelper.getItemOrNull(LocalStorageKeyEnum.babel,
+                      parse: true) as List?)
+                  ?.map((e) => Content.fromJson(e as Map<String, Object?>))
+                  .toList() ??
+              [],
           exercices: (LocalStorageHelper.getItemOrNull(
                       LocalStorageKeyEnum.exercices,
                       parse: true) as List?)
@@ -57,5 +64,19 @@ class LocalStorageBloc extends Cubit<BendState> {
         ),
       ),
     );
+  }
+
+  void getBabel() {
+    final babel =
+        LocalStorageHelper.getItemOrNull(LocalStorageKeyEnum.babel, parse: true)
+            as List?;
+    if (babel.isNull) {
+      return emit(BendLoaded<BabelDto>(data: BabelDto(contents: [])));
+    }
+    emit(BendLoaded<BabelDto>(
+        data: BabelDto(
+            contents: (babel ?? [])
+                .map((e) => Content.fromJson(e as Map<String, Object?>))
+                .toList())));
   }
 }

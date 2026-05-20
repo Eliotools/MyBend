@@ -1,5 +1,6 @@
 
 import 'package:mybend/src/model/activity.dart';
+import 'package:mybend/src/model/content.dart';
 import 'package:mybend/src/model/history.dart';
 import 'package:mybend/src/model/session.dart';
 import 'package:mybend/src/model/streak.dart';
@@ -13,6 +14,7 @@ class DataDto {
     this.history = const [],
     this.current,
     this.streak,
+    this.babel = const [],
   });
 
   String? name;
@@ -22,4 +24,5 @@ class DataDto {
   List<History> history;
   Activity? current;
   Streak? streak;
+  List<Content> babel;
 }

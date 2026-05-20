@@ -22,8 +22,11 @@ class LocalStorageHelper {
       localStorage.setItem(key.name, jsonEncode(item));
 
   static void addItem(LocalStorageKeyEnum key, Object? item) {
+    print('addItem: $item');
     final list = getItemOrNull(key, parse: true) as List? ?? [];
+    print('list: $list');
     list.add(item);
+    print('list after add: $list');
     setItem(key, list);
   }
 

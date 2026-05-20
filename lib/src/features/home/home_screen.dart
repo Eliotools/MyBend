@@ -17,6 +17,7 @@ import 'package:mybend/src/model/home_state.dart';
 import 'package:mybend/src/shared/base_page.dart';
 import 'package:mybend/src/shared/container.dart';
 import 'package:mybend/src/shared/extentions.dart';
+import 'package:mybend/src/features/babel/babel_page.dart';
 
 final dateFormat = DateFormat('d/MM');
 
@@ -115,6 +116,11 @@ class HomePage extends BasePage<LocalStorageBloc, BendState> {
                   child: CupertinoButton(
                 onPressed: () async => context.pushNamed(SudokuPage.name),
                 child: const Text('Sudoku'),
+              )),
+              CustomContainer(
+                  child: CupertinoButton(
+                onPressed: () async => context.pushNamed(BabelPage.name),
+                child: const Text('Babel'),
               )),
               Row(children: [
             
