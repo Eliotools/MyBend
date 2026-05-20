@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart' show DateFormat;
 
@@ -12,6 +11,7 @@ import 'package:mybend/src/features/home/login_content.dart';
 import 'package:mybend/src/features/home/sessions_container.dart';
 import 'package:mybend/src/features/modale/add_activity_modale.dart';
 import 'package:mybend/src/features/settings/settings_screen.dart';
+import 'package:mybend/src/features/sudoku/sudoku_page.dart';
 import 'package:mybend/src/model/data_dto.dart';
 import 'package:mybend/src/model/home_state.dart';
 import 'package:mybend/src/shared/base_page.dart';
@@ -110,6 +110,11 @@ class HomePage extends BasePage<LocalStorageBloc, BendState> {
                   child: CupertinoButton(
                 onPressed: () => context.pushNamed(HistoryScreen.name),
                 child: const Text("Voir l'historique"),
+              )),
+              CustomContainer(
+                  child: CupertinoButton(
+                onPressed: () async => context.pushNamed(SudokuPage.name),
+                child: const Text('Sudoku'),
               )),
               Row(children: [
             

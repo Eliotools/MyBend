@@ -4,6 +4,7 @@ import 'package:mybend/src/features/activity/activity_page.dart';
 import 'package:mybend/src/features/history/history_page.dart';
 import 'package:mybend/src/features/home/home_screen.dart';
 import 'package:mybend/src/features/settings/settings_screen.dart';
+import 'package:mybend/src/features/sudoku/sudoku_page.dart';
 import 'package:mybend/src/model/activity.dart';
 
 class AppRouter {
@@ -76,6 +77,15 @@ class AppRouter {
               context,
               state,
               const SettingsPage(),
+            ),
+          ),
+          GoRoute(
+            name: SudokuPage.name,
+            path: '/${SudokuPage.name}',
+            pageBuilder: (context, state) => noTransition(
+              context,
+              state,
+              const SudokuPage(),
             ),
           ),
         ],

@@ -47,6 +47,7 @@ dependencies:
   intl: ^0.18.1
   fl_chart: ^0.63.0
   table_calendar: ^3.0.9
+  wakelock: ^0.6.2
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -70,3 +71,4 @@ flutter:
     - assets/sprites/lvl-6/
     - assets/sprites/lvl-7/
     - assets/sprites/lvl-8/
+    - assets/sudoku/
