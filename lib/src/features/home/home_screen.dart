@@ -32,7 +32,6 @@ class HomePage extends BasePage<LocalStorageBloc, BendState> {
         BendLoaded<DataDto>(data: final data) => ListView(
             physics: const BouncingScrollPhysics(),
             children: [
-            
               CustomContainer(
                 child: Row(
                   children: [
@@ -78,7 +77,9 @@ class HomePage extends BasePage<LocalStorageBloc, BendState> {
                   ],
                 ),
               ),
-              CustomContainer(
+              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+                CustomContainer(
+                    colorIndex: 0,
                   child: ExpansionTile(
                 textColor: Colors.orange,
                 iconColor: Colors.orange,
@@ -88,6 +89,7 @@ class HomePage extends BasePage<LocalStorageBloc, BendState> {
                 ExerciceContainer(exercices: data.exercices)],
               )),
               CustomContainer(
+                    colorIndex: 1,
                   child: ExpansionTile(
                 textColor: Colors.orange,
                 iconColor: Colors.orange,
@@ -95,6 +97,8 @@ class HomePage extends BasePage<LocalStorageBloc, BendState> {
                 title: const Text('Sessions'),
                 children: [SessionContainer(sessions: data.sessions)],
               )),
+              ]),
+             
               CurrentContainer(current: data.current),
              
               CustomContainer(

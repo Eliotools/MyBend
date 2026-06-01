@@ -58,6 +58,7 @@ class BabelScreenState extends State<BabelScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               CustomContainer(
+                colorIndex: 0,
                 selected: selected == ContentType.book,
                 child: InkWell(
                   onTap: () => setState(() {
@@ -72,6 +73,7 @@ class BabelScreenState extends State<BabelScreen> {
                 ),
               ),
               CustomContainer(
+                colorIndex: 1,
                 selected: selected == ContentType.movie,
                 child: InkWell(
                   onTap: () => setState(() {

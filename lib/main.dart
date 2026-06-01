@@ -1,11 +1,13 @@
 import 'package:flutter/widgets.dart';
-import 'package:mybend/src/app.dart';
-import 'package:intl/date_symbol_data_local.dart';
+import 'package:mybend/app.dart';
+import 'package:mybend/core/auth/auth_cubit.dart';
+import 'package:mybend/core/data/datasources/local_storage_datasource.dart';
+import 'package:mybend/core/di/injections.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await initializeDateFormatting(
-      'en_US', null); // You can change 'en_US' to your desired locale
-  
+  await LocalStorageDataSourceImpl.initialize();
+  setupDependencyInjection();
+  await getIt<AuthCubit>().checkAuthStatus();
   runApp(const App());
 }
