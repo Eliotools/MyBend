@@ -5,14 +5,24 @@ enum ContentType {
   movie,
 }
 
-class Content {
+class ObjectWithId {
+  ObjectWithId({this.id = -1});
+
+  int id;
+}
+
+class Content extends ObjectWithId {
   Content(
-      {required this.name,
-      required this.type,
-      required this.time,
-      required this.comments});
+      {
+    super.id,
+    required this.name,
+    required this.type,
+    required this.time,
+    this.comments,
+  });
 
   factory Content.fromJson(Map<String, Object?> data) => Content(
+      id: data['id'].isNotNull ? int.parse(data['id'].toString()) : -1,
       name: data['name'].isNotNull ? data['name'].toString() : 'not found',
       type: data['type'].isNotNull
           ? ContentType.values.byName(data['type'].toString())
@@ -22,9 +32,13 @@ class Content {
           ? data['comments'].toString()
           : 'not found');
 
+  factory Content.empty() => Content(
+      name: '', type: ContentType.book, time: DateTime.now().secondsSinceEpoch);
+
   static Content? fromJsonOrNull(Map<String, Object?>? data) => data.isNotNull
       ? Content(
-          name: data!['name'].isNotNull ? data['name'].toString() : 'not found',
+          id: data!['id'].isNotNull ? int.parse(data['id'].toString()) : -1,
+          name: data['name'].isNotNull ? data['name'].toString() : 'not found',
           type: data['type'].isNotNull
               ? ContentType.values.byName(data['type'].toString())
               : ContentType.book,
@@ -34,15 +48,18 @@ class Content {
               : 'not found')
       : null;
 
+  
+
   Map<String, Object?> toJson() => {
         'name': name,
         'type': type.name,
         'time': time,
         'comments': comments,
+        'id': id,
       };
 
-  final String name;
-  final ContentType type;
-  final int time;
-  final String comments;
+  String name;
+  ContentType type;
+  int time;
+  String? comments;
 }

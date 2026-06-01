@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:localstorage/localstorage.dart';
 import 'package:mybend/src/enum/local_storage_key_enum.dart';
+import 'package:mybend/src/model/content.dart';
 import 'package:mybend/src/model/streak.dart';
 import 'package:wyatt_type_utils/wyatt_type_utils.dart';
 
@@ -21,12 +22,13 @@ class LocalStorageHelper {
   static void setItem(LocalStorageKeyEnum key, Object item) =>
       localStorage.setItem(key.name, jsonEncode(item));
 
-  static void addItem(LocalStorageKeyEnum key, Object? item) {
-    print('addItem: $item');
+  static void addItem(LocalStorageKeyEnum key, ObjectWithId? item,
+      {setId = false}) {
     final list = getItemOrNull(key, parse: true) as List? ?? [];
-    print('list: $list');
+    if (setId && item?.id == -1) {
+      item?.id = list.length;
+    }
     list.add(item);
-    print('list after add: $list');
     setItem(key, list);
   }
 
@@ -81,6 +83,9 @@ class LocalStorageHelper {
     list.removeAt(index);
     setItem(key, list);
   }
+
+  static void updateIndex(
+      LocalStorageKeyEnum key, int id, ObjectWithId value) {}
 
   static void clear() => localStorage.clear();
 }

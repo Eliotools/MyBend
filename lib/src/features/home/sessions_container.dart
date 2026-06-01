@@ -6,6 +6,7 @@ import 'package:mybend/src/enum/local_storage_key_enum.dart';
 import 'package:mybend/src/features/activity/activity_page.dart';
 import 'package:mybend/src/features/bloc/local_storage_bloc.dart';
 import 'package:mybend/src/helpers/local_storage_helper.dart';
+import 'package:mybend/src/model/history.dart';
 import 'package:mybend/src/model/session.dart';
 import 'package:wakelock/wakelock.dart';
 import 'package:wyatt_type_utils/wyatt_type_utils.dart';
@@ -55,11 +56,13 @@ class _SessionContainerState extends State<SessionContainer> {
                       )
                       .then((value) => Wakelock.disable())
                       .then((value) {
-                      LocalStorageHelper.addItem(LocalStorageKeyEnum.history, {
-                        'name': selected!.name,
-                        'time': selected!.totalTime,
-                        'date': DateTime.now().millisecondsSinceEpoch,
-                      });
+                      LocalStorageHelper.addItem(
+                          LocalStorageKeyEnum.history,
+                          History(
+                              name: selected!.name,
+                              time: selected!.totalTime,
+                              date: DateTime.now()),
+                          setId: true);
                       LocalStorageHelper.addIntItem(
                           LocalStorageKeyEnum.xp, selected!.totalTime ~/ 6);
                       context.read<LocalStorageBloc>().getItems();

@@ -10,6 +10,7 @@ import 'package:mybend/src/helpers/helper.dart';
 import 'package:mybend/src/features/bloc/local_storage_bloc.dart';
 import 'package:mybend/src/helpers/local_storage_helper.dart';
 import 'package:mybend/src/model/activity.dart';
+import 'package:mybend/src/model/history.dart';
 import 'package:mybend/src/shared/extentions.dart';
 
 class ExerciceContainer extends StatefulWidget {
@@ -106,11 +107,13 @@ class _ExerciceContainerState extends State<ExerciceContainer> {
                               .map((e) => e.time)
                               .reduce((a, b) => a + b);
                           LocalStorageHelper.addItem(
-                              LocalStorageKeyEnum.history, {
-                            'name': 'Exercice',
-                            'time': time,
-                            'date': DateTime.now().millisecondsSinceEpoch,
-                          });
+                              LocalStorageKeyEnum.history,
+                              History(
+                                name: 'Exercice',
+                                time: time,
+                                date: DateTime.now(),
+                              ),
+                              setId: true);
                           LocalStorageHelper.addIntItem(
                               LocalStorageKeyEnum.xp, time ~/ 6);
                           context.read<LocalStorageBloc>().getItems();

@@ -41,7 +41,7 @@ class _CreateActivityModaleState extends State<CreateActivityModale> {
               onPressed: () {
                 LocalStorageHelper.addItem(
                   LocalStorageKeyEnum.exercices,
-                  Activity(name: activityName, time: activityTime!),
+                  Activity( name: activityName, time: activityTime!),
                 );
                 context.read<LocalStorageBloc>().getItems();
                 context.pop();

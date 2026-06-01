@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mybend/src/enum/local_storage_key_enum.dart';
 import 'package:mybend/src/helpers/local_storage_helper.dart';
+import 'package:mybend/src/model/history.dart';
 import 'package:wyatt_type_utils/wyatt_type_utils.dart';
 
 class AddActivityModale extends StatefulWidget {
@@ -51,11 +52,12 @@ class AddActivityModaleState extends State<AddActivityModale> {
           CupertinoButton(
               child: const Text('Ajouter'),
               onPressed: () {
-                LocalStorageHelper.addItem(LocalStorageKeyEnum.history, {
-                  'name': nameController.text,
-                  'time': timeController.text,
-                  'date': DateTime.now().millisecondsSinceEpoch,
-                });
+                LocalStorageHelper.addItem(
+                    LocalStorageKeyEnum.history,
+                    History(
+                        name: nameController.text,
+                        time: int.tryParse(timeController.text),
+                        date: DateTime.now()));
 
                 context.pop();
               }),

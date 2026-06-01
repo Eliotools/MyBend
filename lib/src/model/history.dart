@@ -1,10 +1,13 @@
+import 'package:mybend/src/model/content.dart';
 import 'package:wyatt_type_utils/wyatt_type_utils.dart';
 
-class History {
-  History({required this.name, required this.time, required this.date});
+class History extends ObjectWithId {
+  History(
+      {super.id, required this.name, required this.time, required this.date});
 
   factory History.fromJson(Map<String, Object?> data) {
     var history = History(
+        id: data['id'].isNotNull ? int.parse(data['id'].toString()) : -1,
         name: data['name'].isNotNull ? data['name'].toString() : 'not found',
         time: data['time'].isNotNull
             ? int.tryParse(data['time'].toString())
