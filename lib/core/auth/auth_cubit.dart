@@ -32,7 +32,11 @@ class AuthCubit extends Cubit<AuthState> {
         emit(AuthState.signUp);
       }
     } catch (e) {
-      emit(AuthState.initial);
+      emit(AuthState.signUp);
     }
   }
+
+  void markSignedIn() => emit(AuthState.signedIn);
+
+  void markSignUp() => emit(AuthState.signUp);
 }

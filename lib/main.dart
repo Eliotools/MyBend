@@ -9,5 +9,5 @@ Future<void> main() async {
   await LocalStorageDataSourceImpl.initialize();
   setupDependencyInjection();
   await getIt<AuthCubit>().checkAuthStatus();
-  runApp(const App());
+  runApp(App());
 }

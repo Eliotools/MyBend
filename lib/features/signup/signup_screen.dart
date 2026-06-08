@@ -5,62 +5,48 @@ import 'package:mybend/features/signup/signup_cubit.dart';
 import 'package:mybend/shared/cubit_screen.dart';
 import 'package:wyatt_type_utils/wyatt_type_utils.dart';
 
-class SignupScreen extends CubitScreen<SignupCubit, BaseState> {
-  SignupScreen({super.key});
+class SignupScreen extends CubitScreen<SignupCubit, SignupState> {
+  const SignupScreen({super.key});
 
   @override
-  void Function(SignupCubit cubit)? get onInit =>
-      (cubit) => cubit.signup('test');
-
-  @override
-  Widget buildPage(BuildContext context, BaseState state) => Scaffold(
-          body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: SignupContent(onSubmit: (e) => cubit.signup(e)),
-      ));
-}
-
-class SignupContent extends StatefulWidget {
-  const SignupContent({super.key, required this.onSubmit});
-
-  final Function(String) onSubmit;
-
-  @override
-  State<SignupContent> createState() => _SignupContentState();
-}
-
-class _SignupContentState extends State<SignupContent> {
-  String? username;
-  @override
-  Widget build(BuildContext context) => Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          const Column(
+  Widget buildPage(BuildContext context, SignupState state) => Scaffold(
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Text(
-                'Welcome on',
-                style: TextStyle(
-                  fontSize: 25,
+              const Column(
+                children: [
+                  Text(
+                    'Welcome on',
+                    style: TextStyle(
+                      fontSize: 25,
+                    ),
+                  ),
+                  Gap(4),
+                  Text(
+                    'My Bend',
+                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+              TextField(
+                onChanged: cubit.updateUsername,
+                decoration: const InputDecoration(hintText: 'Notre Nom'),
+              ),
+              if (state.status == SignupStatus.loading)
+                const CircularProgressIndicator(),
+              if (state.status == SignupStatus.error)
+                const Text('Une erreur est survenue'),
+              if (state.username.isNotNullOrEmpty &&
+                  state.status != SignupStatus.loading)
+                CupertinoButton(
+                  onPressed: cubit.signup,
+                  child: const Text('Valider'),
                 ),
-              ),
-              Gap(4),
-              Text(
-                'My Bend',
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-              ),
             ],
           ),
-          TextField(
-            onChanged: (v) => setState(() => username = v),
-            decoration: const InputDecoration(hintText: 'Notre Nom'),
-          ),
-          if (username.isNotNullOrEmpty)
-            CupertinoButton(
-                child: const Text('Valider'),
-                onPressed: () {
-                  widget.onSubmit(username!);
-                }),
-        ],
+        ),
       );
 }

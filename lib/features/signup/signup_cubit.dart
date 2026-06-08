@@ -1,34 +1,65 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mybend/core/auth/auth_cubit.dart';
 import 'package:mybend/core/data/repositories/local_storage_repository.dart';
 import 'package:mybend/core/di/injections.dart';
 import 'package:mybend/features/signup/usecases/signup_create_user_usecase.dart';
+import 'package:wyatt_type_utils/wyatt_type_utils.dart';
 
-enum BaseState {
+enum SignupStatus {
   initial,
   loading,
   success,
   error,
 }
 
-class SignupCubit extends Cubit<BaseState> {
-  final AuthCreateUserUseCase authCreateUserUseCase;
+class SignupState {
+  //remove this usless thing
+  const SignupState({
+    this.username = '',
+    this.status = SignupStatus.initial,
+  });
 
-  SignupCubit()
+  final String username;
+  final SignupStatus status;
+
+  SignupState copyWith({String? username, SignupStatus? status}) {
+    return SignupState(
+      username: username ?? this.username,
+      status: status ?? this.status,
+    );
+  }
+}
+
+class SignupCubit extends Cubit<SignupState> {
+  final AuthCreateUserUseCase authCreateUserUseCase;
+  final AuthCubit authCubit;
+
+  SignupCubit({required this.authCubit})
       : authCreateUserUseCase =
             AuthCreateUserUseCase(getIt<LocalStorageRepository>()),
-        super(BaseState.initial);
+        super(const SignupState());
 
-  Future<void> signup(String username) async {
-    emit(BaseState.loading);
+  void updateUsername(String username) {
+    //omg don't use that
+    emit(state.copyWith(username: username));
+  }
+
+  Future<void> signup() async {
+    if (state.username.isNullOrEmpty) {
+      return;
+    }
+
+    emit(state.copyWith(status: SignupStatus.loading));
     try {
-      final user = await authCreateUserUseCase.call(username);
+      final user = await authCreateUserUseCase.call(state.username);
       if (user) {
-        emit(BaseState.success);
+        authCubit.markSignedIn();
+        emit(state.copyWith(status: SignupStatus.success));
       } else {
-        emit(BaseState.error);
+        emit(state.copyWith(status: SignupStatus.error));
       }
     } catch (e) {
-      emit(BaseState.error);
+      emit(state.copyWith(status: SignupStatus.error));
     }
   }
 }
