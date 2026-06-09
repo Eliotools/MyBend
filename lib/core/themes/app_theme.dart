@@ -13,14 +13,14 @@ abstract class AppTheme {
 
   static final theme = ThemeData(
     colorScheme: const ColorScheme(
-      primary: Colors.grey,
-      secondary: Colors.orangeAccent,
+      primary: Color.fromARGB(255, 238, 212, 177),
+      secondary: Color.fromARGB(255, 95, 22, 0),
       brightness: Brightness.dark,
       onPrimary: Colors.grey,
       onSecondary: Colors.orangeAccent,
       error: Colors.red,
       onError: Colors.red,
-      surface: Colors.black,
+      surface: Color.fromARGB(255, 5, 1, 27),
       onSurface: Colors.white,
     ),
     textTheme: textTheme,
