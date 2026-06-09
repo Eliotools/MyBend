@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mybend/core/extensions/context_extensions.dart';
 import 'package:mybend/core/themes/app_theme.dart';
 import 'package:mybend/features/babel/models/content.dart';
+import 'package:mybend/features/babel/widgets/movie_poster_preview.dart';
 import 'package:mybend/features/babel/widgets/star_rating.dart';
 
 class AddContentScreen extends StatefulWidget {
@@ -21,6 +22,7 @@ class _AddContentScreenState extends State<AddContentScreen> {
   String name = '';
   String comments = '';
   int rating = 0;
+  String? imageUrl;
 
   Future<void> _save() async {
     if (name.trim().isEmpty) {
@@ -44,6 +46,7 @@ class _AddContentScreenState extends State<AddContentScreen> {
       rating: rating,
       status: selectedStatus,
       comments: comments.trim().isEmpty ? null : comments.trim(),
+      imageUrl: selectedType == ContentType.movie ? imageUrl : null,
     ));
 
     if (mounted) context.pop(true);
@@ -76,7 +79,10 @@ class _AddContentScreenState extends State<AddContentScreen> {
                             ),
                           ),
                           child: InkWell(
-                            onTap: () => setState(() => selectedType = type),
+                            onTap: () => setState(() {
+                              selectedType = type;
+                              if (type != ContentType.movie) imageUrl = null;
+                            }),
                             borderRadius: BorderRadius.circular(8),
                             child: Padding(
                               padding: const EdgeInsets.all(16),
@@ -96,9 +102,19 @@ class _AddContentScreenState extends State<AddContentScreen> {
             ),
             const SizedBox(height: 24),
             TextField(
-              onChanged: (value) => setState(() => name = value),
+              onChanged: (value) => setState(() {
+                name = value;
+                if (selectedType != ContentType.movie) imageUrl = null;
+              }),
               decoration: const InputDecoration(hintText: 'Nom'),
             ),
+            if (selectedType == ContentType.movie) ...[
+              const SizedBox(height: 16),
+              MoviePosterPreview(
+                movieName: name,
+                onPosterUrlChanged: (url) => imageUrl = url,
+              ),
+            ],
             const SizedBox(height: 16),
             Center(
               child: StarRating(

@@ -121,6 +121,21 @@ class _BabelContentState extends State<BabelContent> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        if (content.type == ContentType.movie &&
+                            content.imageUrl != null) ...[
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: Image.network(
+                              content.imageUrl!,
+                              height: 120,
+                              width: double.infinity,
+                              fit: BoxFit.cover,
+                              errorBuilder: (_, __, ___) =>
+                                  const SizedBox.shrink(),
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                        ],
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [

@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mybend/core/extensions/context_extensions.dart';
 import 'package:mybend/core/themes/app_theme.dart';
 import 'package:mybend/features/babel/models/content.dart';
+import 'package:mybend/features/babel/widgets/movie_poster_preview.dart';
 import 'package:mybend/features/babel/widgets/star_rating.dart';
 
 class UpdateContentScreen extends StatefulWidget {
@@ -24,6 +25,7 @@ class _UpdateContentScreenState extends State<UpdateContentScreen> {
   late ContentType selectedType;
   late ContentStatus selectedStatus;
   late int rating;
+  String? imageUrl;
   late final TextEditingController _nameController;
   late final TextEditingController _commentsController;
 
@@ -33,6 +35,7 @@ class _UpdateContentScreenState extends State<UpdateContentScreen> {
     selectedType = widget.content.type;
     selectedStatus = widget.content.status;
     rating = widget.content.rating;
+    imageUrl = widget.content.imageUrl;
     _nameController = TextEditingController(text: widget.content.name);
     _commentsController =
         TextEditingController(text: widget.content.comments ?? '');
@@ -71,6 +74,8 @@ class _UpdateContentScreenState extends State<UpdateContentScreen> {
         comments: _commentsController.text.trim().isEmpty
             ? null
             : _commentsController.text.trim(),
+        imageUrl:
+            selectedType == ContentType.movie ? imageUrl : null,
       ),
     );
 
@@ -104,7 +109,10 @@ class _UpdateContentScreenState extends State<UpdateContentScreen> {
                             ),
                           ),
                           child: InkWell(
-                            onTap: () => setState(() => selectedType = type),
+                            onTap: () => setState(() {
+                              selectedType = type;
+                              if (type != ContentType.movie) imageUrl = null;
+                            }),
                             borderRadius: BorderRadius.circular(8),
                             child: Padding(
                               padding: const EdgeInsets.all(16),
@@ -125,8 +133,21 @@ class _UpdateContentScreenState extends State<UpdateContentScreen> {
             const SizedBox(height: 24),
             TextField(
               controller: _nameController,
+              onChanged: (value) {
+                if (selectedType != ContentType.movie) {
+                  setState(() => imageUrl = null);
+                }
+              },
               decoration: const InputDecoration(hintText: 'Nom'),
             ),
+            if (selectedType == ContentType.movie) ...[
+              const SizedBox(height: 16),
+              MoviePosterPreview(
+                movieName: _nameController.text,
+                initialUrl: imageUrl,
+                onPosterUrlChanged: (url) => imageUrl = url,
+              ),
+            ],
             const SizedBox(height: 16),
             Center(
               child: StarRating(

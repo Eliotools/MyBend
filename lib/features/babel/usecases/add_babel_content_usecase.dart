@@ -23,6 +23,7 @@ class AddBabelContentUseCase {
         rating: content.rating,
         status: content.status,
         comments: content.comments,
+        imageUrl: content.imageUrl,
       ),
     );
 

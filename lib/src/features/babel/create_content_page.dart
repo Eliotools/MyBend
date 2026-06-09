@@ -72,7 +72,6 @@ class _CreateContentPageState extends State<CreateContentPage> {
                 onChanged: (value) => setState(() => content?.name = value),
                 decoration: const InputDecoration(hintText: 'Nom'),
               ),
-              // TODO: Add 5 stars sélector
               TextField(
                 onChanged: (value) => setState(() => content?.comments = value),
                 decoration: const InputDecoration(hintText: 'Commentaires'),

@@ -1,9 +1,12 @@
 import 'package:get_it/get_it.dart';
 import 'package:mybend/core/data/repositories/local_storage_repository.dart';
 import 'package:mybend/core/data/datasources/local_storage_datasource.dart';
+import 'package:mybend/core/data/datasources/tmdb_datasource.dart';
+import 'package:mybend/core/data/repositories/tmdb_repository.dart';
 import 'package:mybend/features/babel/babel_cubit.dart';
 import 'package:mybend/features/babel/usecases/add_babel_content_usecase.dart';
 import 'package:mybend/features/babel/usecases/get_babel_contents_usecase.dart';
+import 'package:mybend/features/babel/usecases/get_movie_poster_usecase.dart';
 import 'package:mybend/features/babel/usecases/update_babel_content_usecase.dart';
 import 'package:mybend/features/home/home_cubit.dart';
 import 'package:mybend/features/signup/signup_cubit.dart';
@@ -16,6 +19,9 @@ final getIt = GetIt.instance;
 void setupDependencyInjection() {
   getIt.registerSingleton<LocalStorageRepository>(LocalStorageRepositoryImpl(
       localStorageDataSource: LocalStorageDataSourceImpl()));
+  getIt.registerSingleton<TmdbDataSource>(TmdbDataSourceImpl());
+  getIt.registerSingleton<TmdbRepository>(
+      TmdbRepositoryImpl(tmdbDataSource: getIt<TmdbDataSource>()));
   getIt.registerSingleton<AuthUserExiteUseCase>(
       AuthUserExiteUseCase(getIt<LocalStorageRepository>()));
   getIt.registerSingleton<AuthCreateUserUseCase>(
@@ -26,6 +32,8 @@ void setupDependencyInjection() {
       AddBabelContentUseCase(getIt<LocalStorageRepository>()));
   getIt.registerSingleton<UpdateBabelContentUseCase>(
       UpdateBabelContentUseCase(getIt<LocalStorageRepository>()));
+  getIt.registerSingleton<GetMoviePosterUseCase>(
+      GetMoviePosterUseCase(getIt<TmdbRepository>()));
       getIt.registerLazySingleton(() => AuthCubit());
   getIt.registerLazySingleton(() => SignupCubit(authCubit: getIt<AuthCubit>()));
   getIt.registerLazySingleton(() => HomeCubit(authCubit: getIt<AuthCubit>()));

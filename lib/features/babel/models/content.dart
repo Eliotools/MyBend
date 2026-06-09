@@ -30,6 +30,7 @@ class Content {
     this.rating = 0,
     this.status = ContentStatus.todo,
     this.comments,
+    this.imageUrl,
   });
 
   factory Content.fromJson(Map<String, Object?> data) {
@@ -49,6 +50,7 @@ class Content {
           ? ContentStatus.values.byName(data['status'].toString())
           : ContentStatus.todo,
       comments: data['comments']?.toString(),
+      imageUrl: data['imageUrl']?.toString(),
     );
   }
 
@@ -59,6 +61,7 @@ class Content {
   final int rating;
   final ContentStatus status;
   final String? comments;
+  final String? imageUrl;
 
   Map<String, Object?> toJson() => {
         'id': id,
@@ -68,5 +71,6 @@ class Content {
         'rating': rating,
         'status': status.name,
         'comments': comments,
+        if (imageUrl != null) 'imageUrl': imageUrl,
       };
 }

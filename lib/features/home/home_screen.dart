@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mybend/core/themes/app_colors.dart';
 import 'package:mybend/core/themes/app_theme.dart';
 import 'package:mybend/features/home/home_cubit.dart';
 import 'package:mybend/shared/cubit_screen.dart';
@@ -43,22 +42,22 @@ class HomeScreen extends CubitScreen<HomeCubit, DataState> {
                       _HomePlaceholderTile(
                         //use global container
                         label: 'Babel',
-                        color: AppColors.containersColor['green']!,
+                        color: Colors.green,
                         onTap: () => context.push('/babel'),
                       ),
                       _HomePlaceholderTile(
                         label: 'Alexandry',
-                        color: AppColors.containersColor['blue']!,
+                        color: Colors.blue,
                         onTap: () => context.push('/alexandry'),
                       ),
                       _HomePlaceholderTile(
                         label: 'MyBend',
-                        color: AppColors.containersColor['yellow']!,
+                        color: Colors.yellow,
                         onTap: () => context.push('/mybend'),
                       ),
                       _HomePlaceholderTile(
                         label: 'Sudoku',
-                        color: AppColors.containersColor['orange']!,
+                        color: Colors.orange,
                         onTap: () => context.push('/sudoku'),
                       ),
                     ],
