@@ -1,6 +1,13 @@
+import 'package:flutter/material.dart';
+
 enum ContentType {
-  book,
-  movie,
+  book('Livre', Icons.book),
+  movie('Film', Icons.movie  );
+
+  const ContentType(this.name, this.icon);
+
+  final String name;
+  final IconData icon;
 }
 
 class Content {

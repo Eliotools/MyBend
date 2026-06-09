@@ -10,10 +10,7 @@ class BabelScreen extends CubitScreen<BabelCubit, DataState> {
   const BabelScreen({super.key});
 
   @override
-  void Function(BabelCubit cubit)? get onInit => (cubit) {
-    print('==========================onInit=========================');
-    cubit.load();
-  };
+  void Function(BabelCubit cubit)? get onInit => (cubit) => cubit.load();
 
   @override
   Widget buildPage(BuildContext context, DataState state) => Scaffold(
@@ -31,87 +28,13 @@ class BabelScreen extends CubitScreen<BabelCubit, DataState> {
                 style: AppTheme.textTheme.bodyMedium,
               ),
             ),
-          Loaded<List<Content>>(data: final data) => data.isEmpty ? const Text('No content') : BabelContent(contents: data),
+          Loaded<List<Content>>(data: final data) => BabelContent(contents: data),
           _ => const SizedBox.shrink(),
         },
       );
 }
 
-class _TypeSelector extends StatelessWidget {
-  const _TypeSelector({
-    required this.label,
-    required this.icon,
-    required this.selected,
-    required this.color,
-    required this.onTap,
-  });
 
-  final String label;
-  final IconData icon;
-  final bool selected;
-  final Color color;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: color.withOpacity(selected ? 1 : 0.5),
-      borderRadius: BorderRadius.circular(8),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(8),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          child: Column(
-            children: [
-              Icon(icon),
-              const SizedBox(height: 8),
-              Text(label, style: AppTheme.textTheme.bodyMedium),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _ContentTile extends StatelessWidget {
-  const _ContentTile({required this.content});
-
-  final Content content;
-
-  @override
-  Widget build(BuildContext context) {
-    //use global container
-    return Container(
-      width: double.infinity,
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: AppColors.containersColor['orange']!,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            content.name,
-            style: AppTheme.textTheme.titleMedium,
-          ),
-          if (content.comments?.isNotEmpty ?? false) ...[
-            const SizedBox(height: 4),
-            Text(
-              content.comments!,
-              style: AppTheme.textTheme.bodySmall,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ],
-        ],
-      ),
-    );
-  }
-}
 
 
 class BabelContent extends StatefulWidget {
@@ -132,27 +55,21 @@ class _BabelContentState extends State<BabelContent> {
               padding: const EdgeInsets.all(16),
               children: [
                 Row(
-                  children: [
-                    Expanded(
-                      child: _TypeSelector(
-                        label: 'Livre',
-                        icon: Icons.book,
-                        selected: selectedType == ContentType.book,
-                        color: AppColors.containersColor['green']!,
-                        onTap: () => setState(() => selectedType = ContentType.book),
-                      ),
+                  children: ContentType.values.map((type) => Expanded(child: Container(
+                    //TODO: update white customContainer
+                    decoration: BoxDecoration(
+                     color: selectedType == type ? AppColors.containersColor['green']! :null,
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: Colors.white, width: selectedType == type ? 2 : 0),
                     ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: _TypeSelector(
-                        label: 'Film',
-                        icon: Icons.movie,
-                        selected: selectedType == ContentType.movie,
-                        color: AppColors.containersColor['blue']!,
-                        onTap: () => setState(() => selectedType = ContentType.movie),
+                    padding: const EdgeInsets.all(16),
+                    child: InkWell(
+                      onTap: () => setState(() => selectedType = type),
+                      child: Column(
+                          children: [Icon(type.icon), Text(type.name)],
+                        ),
                       ),
-                    ),
-                  ],
+                  ),),).toList(),
                 ),
                 const SizedBox(height: 16),
                 if (widget.contents.where((content) => content.type == selectedType).isEmpty)
@@ -163,7 +80,10 @@ class _BabelContentState extends State<BabelContent> {
                   )
                 else
                   ...widget.contents.where((content) => content.type == selectedType).map(
-                    (content) => _ContentTile(content: content),
+                    (content) => Container(
+                      padding: const EdgeInsets.all(16),
+                      child: Text(content.name),
+                    ),
                   ),
               ],
             );
