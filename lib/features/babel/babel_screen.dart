@@ -6,6 +6,7 @@ import 'package:mybend/features/babel/babel_cubit.dart';
 import 'package:mybend/features/babel/models/content.dart';
 import 'package:mybend/features/babel/widgets/star_rating.dart';
 import 'package:mybend/shared/cubit_screen.dart';
+import 'package:mybend/shared/custom_container.dart';
 import 'package:mybend/src/shared/data_state.dart';
 
 class BabelScreen extends CubitScreen<BabelCubit, DataState> {
@@ -46,7 +47,7 @@ class BabelScreen extends CubitScreen<BabelCubit, DataState> {
         _ => const SizedBox.shrink(),
       };
 }
-
+//This could be in a separated file
 class BabelContent extends StatefulWidget {
   const BabelContent({
     super.key,
@@ -67,24 +68,13 @@ class _BabelContentState extends State<BabelContent> {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      padding: const EdgeInsets.all(16),
       children: [
         Row(
           children: ContentType.values
               .map(
                 (type) => Expanded(
-                  child: Container(
-                    //TODO: update white customContainer
-                    decoration: BoxDecoration(
-                      color: selectedType == type
-                          ? context.colorScheme.primary
-                          : null,
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                          color: Colors.white,
-                          width: selectedType == type ? 2 : 0),
-                    ),
-                    padding: const EdgeInsets.all(16),
+                  child: CustomContainer(
+                    selected: selectedType == type,
                     child: InkWell(
                       onTap: () => setState(() => selectedType = type),
                       child: Column(
@@ -111,13 +101,8 @@ class _BabelContentState extends State<BabelContent> {
               .map(
                 (content) => GestureDetector(
                   onDoubleTap: () => widget.onContentDoubleTap(content),
-                  child: Container(
-                    margin: const EdgeInsets.only(bottom: 12),
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: context.colorScheme.primary.withAlpha(51),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
+                  child: CustomContainer(
+                    color: context.colorScheme.primary.withAlpha(51),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -143,9 +128,6 @@ class _BabelContentState extends State<BabelContent> {
                               content.name,
                               style: AppTheme.textTheme.titleMedium,
                             ),
-                            if (content.rating > 0) ...[
-                              StarRating(rating: content.rating, size: 20),
-                            ],
                             Container(
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 8,
@@ -163,6 +145,12 @@ class _BabelContentState extends State<BabelContent> {
                             ),
                           ],
                         ),
+                           if (content.rating > 0) ...[
+                            Row(children: [
+                              const Spacer(),
+                              StarRating(rating: content.rating, size: 20),
+                            ],)
+                            ],
                         if (content.comments?.isNotEmpty ?? false) ...[
                           const SizedBox(height: 4),
                           Text(

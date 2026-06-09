@@ -28,7 +28,10 @@ abstract class CubitScreen<TCubit extends Cubit<TState>, TState>
           create: (_) => cubit,
           child: BlocBuilder<TCubit, TState>(
             builder: (context, state) {
-              return buildPage(context, state);
+              return Padding(
+                padding: const EdgeInsets.all(16),
+                child :buildPage(context, state),
+              );
             },
           ),
         ));

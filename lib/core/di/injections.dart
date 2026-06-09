@@ -34,8 +34,8 @@ void setupDependencyInjection() {
       UpdateBabelContentUseCase(getIt<LocalStorageRepository>()));
   getIt.registerSingleton<GetMoviePosterUseCase>(
       GetMoviePosterUseCase(getIt<TmdbRepository>()));
-      getIt.registerLazySingleton(() => AuthCubit());
-  getIt.registerLazySingleton(() => SignupCubit(authCubit: getIt<AuthCubit>()));
-  getIt.registerLazySingleton(() => HomeCubit(authCubit: getIt<AuthCubit>()));
+  getIt.registerLazySingleton(() => AuthCubit());
+  getIt.registerLazySingleton(() => SignupCubit());
+  getIt.registerLazySingleton(() => HomeCubit());
   getIt.registerLazySingleton(() => BabelCubit());
 }

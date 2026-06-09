@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mybend/core/extensions/context_extensions.dart';
 import 'package:mybend/core/themes/app_theme.dart';
 import 'package:mybend/features/babel/models/content.dart';
 import 'package:mybend/features/babel/widgets/movie_poster_preview.dart';
 import 'package:mybend/features/babel/widgets/star_rating.dart';
+import 'package:mybend/shared/custom_container.dart';
 
 class UpdateContentScreen extends StatefulWidget {
   const UpdateContentScreen({
@@ -56,13 +56,6 @@ class _UpdateContentScreenState extends State<UpdateContentScreen> {
       return;
     }
 
-    if (rating == 0) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Veuillez choisir une note')),
-      );
-      return;
-    }
-
     widget.callback(
       Content(
         id: widget.content.id,
@@ -86,29 +79,17 @@ class _UpdateContentScreenState extends State<UpdateContentScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Update content')),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
+      body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Row(
               children: ContentType.values
                   .map(
                     (type) => Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 4),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: selectedType == type
-                                ? context.colorScheme.primary
-                                : null,
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(
-                              color: Colors.white,
-                              width: selectedType == type ? 2 : 0,
-                            ),
-                          ),
-                          child: InkWell(
+                      child: CustomContainer(
+                        small :true,
+                        selected: selectedType == type,
+                        child: InkWell(
                             onTap: () => setState(() {
                               selectedType = type;
                               if (type != ContentType.movie) imageUrl = null;
@@ -124,8 +105,7 @@ class _UpdateContentScreenState extends State<UpdateContentScreen> {
                               ),
                             ),
                           ),
-                        ),
-                      ),
+                      )
                     ),
                   )
                   .toList(),
@@ -150,7 +130,7 @@ class _UpdateContentScreenState extends State<UpdateContentScreen> {
             ],
             const SizedBox(height: 16),
             Center(
-              child: StarRating(
+              child: StarRatingButton(
                 rating: rating,
                 onRatingChanged: (value) => setState(() => rating = value),
               ),
@@ -163,17 +143,10 @@ class _UpdateContentScreenState extends State<UpdateContentScreen> {
                     (status) => Expanded(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 4),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: selectedStatus == status
-                                ? context.colorScheme.primary
-                                : null,
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(
-                              color: Colors.white,
-                              width: selectedStatus == status ? 2 : 0,
-                            ),
-                          ),
+                        child: CustomContainer(
+                          selected: selectedStatus == status,
+                        small :true,
+
                           child: InkWell(
                             onTap: () =>
                                 setState(() => selectedStatus = status),
@@ -209,7 +182,6 @@ class _UpdateContentScreenState extends State<UpdateContentScreen> {
             ),
           ],
         ),
-      ),
     );
   }
 }

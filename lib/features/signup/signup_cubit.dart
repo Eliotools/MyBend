@@ -11,9 +11,10 @@ class SignupCubit extends Cubit<DataState> {
   final AuthCreateUserUseCase authCreateUserUseCase;
   final AuthCubit authCubit;
 
-  SignupCubit({required this.authCubit})
+  SignupCubit()
       : authCreateUserUseCase =
             AuthCreateUserUseCase(getIt<LocalStorageRepository>()),
+        authCubit = getIt<AuthCubit>(),
         super(const Initial());
 
   Future<void> signup(String username) async {

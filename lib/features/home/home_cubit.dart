@@ -7,9 +7,9 @@ import 'package:wyatt_type_utils/wyatt_type_utils.dart';
 import 'package:mybend/src/shared/data_state.dart';
 
 class HomeCubit extends Cubit<DataState> {
-  HomeCubit({required AuthCubit authCubit})
+  HomeCubit()
       : _localStorageRepository = getIt<LocalStorageRepository>(),
-        _authCubit = authCubit,
+        _authCubit = getIt<AuthCubit>(),
         super(const Initial());
 
   final LocalStorageRepository _localStorageRepository;

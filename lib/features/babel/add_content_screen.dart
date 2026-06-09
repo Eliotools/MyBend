@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mybend/core/extensions/context_extensions.dart';
 import 'package:mybend/core/themes/app_theme.dart';
 import 'package:mybend/features/babel/models/content.dart';
 import 'package:mybend/features/babel/widgets/movie_poster_preview.dart';
 import 'package:mybend/features/babel/widgets/star_rating.dart';
+import 'package:mybend/shared/custom_container.dart';
 
 class AddContentScreen extends StatefulWidget {
   const AddContentScreen({super.key, required this.callback});
@@ -32,13 +32,6 @@ class _AddContentScreenState extends State<AddContentScreen> {
       return;
     }
 
-    if (rating == 0) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Veuillez choisir une note')),
-      );
-      return;
-    }
-
     widget.callback(Content(
       name: name.trim(),
       type: selectedType,
@@ -56,9 +49,7 @@ class _AddContentScreenState extends State<AddContentScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Add content')),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
+      body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Row(
@@ -67,17 +58,9 @@ class _AddContentScreenState extends State<AddContentScreen> {
                     (type) => Expanded(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 4),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: selectedType == type
-                                ? context.colorScheme.primary
-                                : null,
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(
-                              color: Colors.white,
-                              width: selectedType == type ? 2 : 0,
-                            ),
-                          ),
+                        child: CustomContainer(
+                          selected: selectedType == type,
+                          small: true,
                           child: InkWell(
                             onTap: () => setState(() {
                               selectedType = type;
@@ -117,7 +100,7 @@ class _AddContentScreenState extends State<AddContentScreen> {
             ],
             const SizedBox(height: 16),
             Center(
-              child: StarRating(
+              child: StarRatingButton(
                 rating: rating,
                 onRatingChanged: (value) => setState(() => rating = value),
               ),
@@ -129,17 +112,9 @@ class _AddContentScreenState extends State<AddContentScreen> {
                     (status) => Expanded(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 4),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: selectedStatus == status
-                                ? context.colorScheme.primary
-                                : null,
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(
-                              color: Colors.white,
-                              width: selectedStatus == status ? 2 : 0,
-                            ),
-                          ),
+                        child: CustomContainer(
+                          selected: selectedStatus == status,
+                          small: true,
                           child: InkWell(
                             onTap: () =>
                                 setState(() => selectedStatus = status),
@@ -176,7 +151,6 @@ class _AddContentScreenState extends State<AddContentScreen> {
              const SizedBox(height: 16),
           ],
         ),
-      ),
-    );
+      );
   }
 }

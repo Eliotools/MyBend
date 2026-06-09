@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class StarRating extends StatelessWidget {
-  const StarRating({
+class StarRatingButton extends StatelessWidget {
+  const StarRatingButton({
     super.key,
     required this.rating,
     this.onRatingChanged,
@@ -32,6 +32,34 @@ class StarRating extends StatelessWidget {
             size: size,
           ),
         );
+      }),
+    );
+  }
+}
+
+class StarRating extends StatelessWidget {
+  const StarRating({
+    super.key,
+    required this.rating,
+    this.size = 32,
+  });
+
+  final int rating;
+  final double size;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: List.generate(5, (index) {
+        final star = index + 1;
+        final filled = star <= rating;
+
+        return Icon(
+            filled ? Icons.star : Icons.star_border,
+            color: Colors.amber,
+            size: size,
+          );
       }),
     );
   }
