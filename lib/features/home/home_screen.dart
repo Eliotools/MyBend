@@ -15,74 +15,71 @@ class HomeScreen extends CubitScreen<HomeCubit, DataState> {
   void Function(HomeCubit cubit)? get onInit => (cubit) => cubit.load();
 
   @override
-  Widget buildPage(BuildContext context, DataState state) => Scaffold(
-        appBar: AppBar(
-          //use global appbar
-          title: const Text('My Bend'),
-        ),
-        body: switch (state) {
-          Initial() || Loading() => const Center(
-              child: CircularProgressIndicator(),
-            ),
-          Loaded<String?>(data: final data) => Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text(
-                    'Bonjour $data',
-                    style: AppTheme.textTheme.titleMedium,
-                    textAlign: TextAlign.center,
+  String get name => 'Home';
+
+  @override
+  Widget buildPage(BuildContext context, DataState state) => switch (state) {
+        Initial() || Loading() => const Center(
+            child: CircularProgressIndicator(),
+          ),
+        Loaded<String?>(data: final data) => Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  'Bonjour $data',
+                  style: AppTheme.textTheme.titleMedium,
+                  textAlign: TextAlign.center,
+                ),
+                const Gap(24),
+                Expanded(
+                  child: GridView.count(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 12,
+                    crossAxisSpacing: 12,
+                    childAspectRatio: 1,
+                    children: [
+                      _HomePlaceholderTile(
+                        //use global container
+                        label: 'Babel',
+                        color: AppColors.containersColor['green']!,
+                        onTap: () => context.push('/babel'),
+                      ),
+                      _HomePlaceholderTile(
+                        label: 'Alexandry',
+                        color: AppColors.containersColor['blue']!,
+                        onTap: () => context.push('/alexandry'),
+                      ),
+                      _HomePlaceholderTile(
+                        label: 'MyBend',
+                        color: AppColors.containersColor['yellow']!,
+                        onTap: () => context.push('/mybend'),
+                      ),
+                      _HomePlaceholderTile(
+                        label: 'Sudoku',
+                        color: AppColors.containersColor['orange']!,
+                        onTap: () => context.push('/sudoku'),
+                      ),
+                    ],
                   ),
-                  const Gap(24),
-                  Expanded(
-                    child: GridView.count(
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 12,
-                      crossAxisSpacing: 12,
-                      childAspectRatio: 1,
-                      children: [
-                        _HomePlaceholderTile(
-                          //use global container
-                          label: 'Babel',
-                          color: AppColors.containersColor['green']!,
-                          onTap: () => context.push('/babel'),
-                        ),
-                        _HomePlaceholderTile(
-                          label: 'Alexandry',
-                          color: AppColors.containersColor['blue']!,
-                          onTap: () => context.push('/alexandry'),
-                        ),
-                        _HomePlaceholderTile(
-                          label: 'MyBend',
-                          color: AppColors.containersColor['yellow']!,
-                          onTap: () => context.push('/mybend'),
-                        ),
-                        _HomePlaceholderTile(
-                          label: 'Sudoku',
-                          color: AppColors.containersColor['orange']!,
-                          onTap: () => context.push('/sudoku'),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const Gap(16),
-                  CupertinoButton(
-                    onPressed: cubit.clearStorage,
-                    child: const Text('Effacer les données'),
-                  ),
-                ],
-              ),
+                ),
+                const Gap(16),
+                CupertinoButton(
+                  onPressed: cubit.clearStorage,
+                  child: const Text('Effacer les données'),
+                ),
+              ],
             ),
-          Error(message: final message) => Center(
-              child: Text(
-                message,
-                style: AppTheme.textTheme.bodyMedium,
-              ),
+          ),
+        Error(message: final message) => Center(
+            child: Text(
+              message,
+              style: AppTheme.textTheme.bodyMedium,
             ),
-            _ => const SizedBox.shrink(),
-        }
-      );
+          ),
+        _ => const SizedBox.shrink(),
+      };
 }
 
 class _HomePlaceholderTile extends StatelessWidget {

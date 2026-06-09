@@ -10,39 +10,40 @@ class SignupScreen extends CubitScreen<SignupCubit, DataState> {
   const SignupScreen({super.key});
 
   @override
-  Widget buildPage(BuildContext context, DataState state) => Scaffold(
-        body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              const Column(
-                children: [
-                  Text(
-                    'Welcome on',
-                    style: TextStyle(
-                      fontSize: 25,
-                    ),
+  String get name => 'Signup';
+
+  @override
+  Widget buildPage(BuildContext context, DataState state) => Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            const Column(
+              children: [
+                Text(
+                  'Welcome on',
+                  style: TextStyle(
+                    fontSize: 25,
                   ),
-                  Gap(4),
-                  Text(
-                    'My Bend',
-                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
-              SignUpContent(onValidate: (value) => cubit.signup(value)),
-              switch (state) {
-                Loading() => const CircularProgressIndicator(),
-                Error(message: final message) => Text(message),
-                Loaded() =>const Center(child: Text('User created')),
-                Initial() => const SizedBox.shrink(),
-              },
-            ],
-          ),
+                ),
+                Gap(4),
+                Text(
+                  'My Bend',
+                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+            SignUpContent(onValidate: (value) => cubit.signup(value)),
+            switch (state) {
+              Loading() => const CircularProgressIndicator(),
+              Error(message: final message) => Text(message),
+              Loaded() => const Center(child: Text('User created')),
+              Initial() => const SizedBox.shrink(),
+            },
+          ],
         ),
-       );
+      );
 }
 
 class SignUpContent extends StatefulWidget {
@@ -68,8 +69,8 @@ class _SignUpContentState extends State<SignUpContent> {
         if (username.isNotNullOrEmpty)
           CupertinoButton(
             onPressed: () => widget.onValidate(username!),
-          child: const Text('Valider'),
-        ),
+            child: const Text('Valider'),
+          ),
       ],
     );
   }

@@ -15,7 +15,6 @@ class AuthCubit extends Cubit<DataState> {
             AuthCreateUserUseCase(getIt<LocalStorageRepository>()),
         super(const Initial());
 
-  /// Call on app start. Checks for user key in storage.
   Future<void> checkAuthStatus() async {
     emit(const Loading());
     try {
@@ -26,7 +25,7 @@ class AuthCubit extends Cubit<DataState> {
         emit(const Loaded(false));
       }
     } catch (e) {
-      emit( Error(e.toString()));
+      emit(Error(e.toString()));
     }
   }
 

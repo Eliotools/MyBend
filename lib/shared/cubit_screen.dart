@@ -10,22 +10,24 @@ abstract class CubitScreen<TCubit extends Cubit<TState>, TState>
 
   Widget buildPage(BuildContext context, TState state);
 
+  String get name => 'Pagename';
+
   TCubit get cubit => getIt<TCubit>();
 
   final void Function(TCubit cubit)? onInit = null;
 
-
   @override
   Widget build(BuildContext context) {
     onInit?.call(cubit);
-    return BlocProvider<TCubit>(
-      create: (_) => cubit,
-      child: BlocBuilder<TCubit, TState>(
-      builder: (context, state) {
-        return buildPage(context, state);
-      },
-    ),);
-    
-     
+    return Scaffold(
+        appBar: AppBar(title: Text(name)),
+        body: BlocProvider<TCubit>(
+          create: (_) => cubit,
+          child: BlocBuilder<TCubit, TState>(
+            builder: (context, state) {
+              return buildPage(context, state);
+            },
+          ),
+        ));
   }
 }
