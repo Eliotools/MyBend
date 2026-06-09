@@ -3,15 +3,9 @@ import 'package:mybend/core/auth/usecases/auth_user_exite_usecase.dart';
 import 'package:mybend/core/data/repositories/local_storage_repository.dart';
 import 'package:mybend/core/di/injections.dart';
 import 'package:mybend/features/signup/usecases/signup_create_user_usecase.dart';
+import 'package:mybend/src/shared/data_state.dart';
 
-enum AuthState {
-  initial,
-  loading,
-  signedIn,
-  signUp,
-}
-
-class AuthCubit extends Cubit<AuthState> {
+class AuthCubit extends Cubit<DataState> {
   final AuthUserExiteUseCase authUserExiteUseCase;
   final AuthCreateUserUseCase authCreateUserUseCase;
   AuthCubit()
@@ -19,24 +13,24 @@ class AuthCubit extends Cubit<AuthState> {
             AuthUserExiteUseCase(getIt<LocalStorageRepository>()),
         authCreateUserUseCase =
             AuthCreateUserUseCase(getIt<LocalStorageRepository>()),
-        super(AuthState.initial);
+        super(const Initial());
 
   /// Call on app start. Checks for user key in storage.
   Future<void> checkAuthStatus() async {
-    emit(AuthState.loading);
+    emit(const Loading());
     try {
       final bool isUserExiteUseCaseResult = await authUserExiteUseCase.call();
       if (isUserExiteUseCaseResult) {
-        emit(AuthState.signedIn);
+        emit(const Loaded(true));
       } else {
-        emit(AuthState.signUp);
+        emit(const Loaded(false));
       }
     } catch (e) {
-      emit(AuthState.signUp);
+      emit( Error(e.toString()));
     }
   }
 
-  void markSignedIn() => emit(AuthState.signedIn);
+  void markSignedIn() => emit(const Loaded(true));
 
-  void markSignUp() => emit(AuthState.signUp);
+  void markSignUp() => emit(const Loaded(false));
 }

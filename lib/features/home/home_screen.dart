@@ -6,30 +6,31 @@ import 'package:mybend/core/themes/app_colors.dart';
 import 'package:mybend/core/themes/app_theme.dart';
 import 'package:mybend/features/home/home_cubit.dart';
 import 'package:mybend/shared/cubit_screen.dart';
+import 'package:mybend/src/shared/data_state.dart';
 
-class HomeScreen extends CubitScreen<HomeCubit, HomeState> {
+class HomeScreen extends CubitScreen<HomeCubit, DataState> {
   const HomeScreen({super.key});
 
   @override
   void Function(HomeCubit cubit)? get onInit => (cubit) => cubit.load();
 
   @override
-  Widget buildPage(BuildContext context, HomeState state) => Scaffold(
+  Widget buildPage(BuildContext context, DataState state) => Scaffold(
         appBar: AppBar(
           //use global appbar
           title: const Text('My Bend'),
         ),
         body: switch (state) {
-          HomeState.initial || HomeState.loading => const Center(
+          Initial() || Loading() => const Center(
               child: CircularProgressIndicator(),
             ),
-          HomeState.loaded => Padding(
+          Loaded<String?>(data: final data) => Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(
-                    'Bonjour ${cubit.username}',
+                    'Bonjour $data',
                     style: AppTheme.textTheme.titleMedium,
                     textAlign: TextAlign.center,
                   ),
@@ -73,13 +74,14 @@ class HomeScreen extends CubitScreen<HomeCubit, HomeState> {
                 ],
               ),
             ),
-          HomeState.error => Center(
+          Error(message: final message) => Center(
               child: Text(
-                'Impossible de charger le profil',
+                message,
                 style: AppTheme.textTheme.bodyMedium,
               ),
             ),
-        },
+            _ => const SizedBox.shrink(),
+        }
       );
 }
 

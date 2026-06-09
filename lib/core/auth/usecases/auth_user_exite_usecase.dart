@@ -8,10 +8,8 @@ class AuthUserExiteUseCase {
   AuthUserExiteUseCase(this._localStorageRepository);
 
   Future<bool> call() async {
-    print('call');
     final userKey =
         await _localStorageRepository.getValue(LocalStorageKey.userName);
-    print('userKey: $userKey');
     return userKey.isNotNullOrEmpty;
   }
 }

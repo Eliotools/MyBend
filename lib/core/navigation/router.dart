@@ -6,6 +6,7 @@ import 'package:mybend/core/themes/app_theme.dart';
 import 'package:mybend/features/babel/babel_screen.dart';
 import 'package:mybend/features/home/home_screen.dart';
 import 'package:mybend/features/signup/signup_screen.dart';
+import 'package:mybend/src/shared/data_state.dart';
 
 class AppRouter {
   AppRouter(this.authCubit) {
@@ -44,16 +45,18 @@ class AppRouter {
     final location = state.matchedLocation;
 
     switch (authStatus) {
-      case AuthState.initial:
-      case AuthState.loading:
+      case const Initial():
+      case const Loading():
         return location == '/splash' ? null : '/splash';
-      case AuthState.signUp:
+      case const Loaded(false):
         return location == '/login' ? null : '/login';
-      case AuthState.signedIn:
+      case const Loaded(true):
         if (location == '/login' || location == '/splash') {
           return '/home';
         }
         return null;
+      default:
+        return '/splash';
     }
   }
 }
