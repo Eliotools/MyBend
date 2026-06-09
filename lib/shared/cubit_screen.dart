@@ -10,7 +10,9 @@ abstract class CubitScreen<TCubit extends Cubit<TState>, TState>
 
   Widget buildPage(BuildContext context, TState state);
 
-  String get name => 'Pagename';
+  final String name = 'Pagename';
+
+  Widget? get floatingActionButton => null;
 
   TCubit get cubit => getIt<TCubit>();
 
@@ -21,6 +23,7 @@ abstract class CubitScreen<TCubit extends Cubit<TState>, TState>
     onInit?.call(cubit);
     return Scaffold(
         appBar: AppBar(title: Text(name)),
+        floatingActionButton: floatingActionButton,
         body: BlocProvider<TCubit>(
           create: (_) => cubit,
           child: BlocBuilder<TCubit, TState>(

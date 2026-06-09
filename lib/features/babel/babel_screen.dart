@@ -23,7 +23,7 @@ class BabelScreen extends CubitScreen<BabelCubit, DataState> {
           onPressed: () async {
             await context.push<bool>('/babel/add');
           },
-          child: const Icon(Icons.add),
+          child: const Icon(Icons.add, color: Colors.white),
         ),
       );
 
