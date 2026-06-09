@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mybend/core/auth/auth_cubit.dart';
+import 'package:mybend/core/di/injections.dart';
 import 'package:mybend/core/navigation/go_router_refresh_stream.dart';
 import 'package:mybend/core/themes/app_theme.dart';
+import 'package:mybend/features/babel/add_content_screen.dart';
 import 'package:mybend/features/babel/babel_screen.dart';
+import 'package:mybend/features/babel/babel_cubit.dart';
+import 'package:mybend/features/babel/models/content.dart';
+import 'package:mybend/features/babel/update_content_screen.dart';
 import 'package:mybend/features/home/home_screen.dart';
 import 'package:mybend/features/signup/signup_screen.dart';
 import 'package:mybend/src/shared/data_state.dart';
@@ -30,6 +35,24 @@ class AppRouter {
         GoRoute(
           path: '/babel',
           builder: (context, state) => const BabelScreen(),
+          routes: [
+            GoRoute(
+              path: 'add',
+              builder: (context, state) => AddContentScreen(callback: (content) {
+                getIt<BabelCubit>().addContent(content);
+              }),
+            ),
+            GoRoute(
+              path: 'edit',
+              builder: (context, state) {
+                final content = state.extra! as Content;
+                return UpdateContentScreen(
+                  content: content,
+                  callback: getIt<BabelCubit>().updateContent,
+                );
+              },
+            ),
+          ],
         ),
       ],
     );

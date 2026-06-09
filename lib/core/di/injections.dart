@@ -2,7 +2,9 @@ import 'package:get_it/get_it.dart';
 import 'package:mybend/core/data/repositories/local_storage_repository.dart';
 import 'package:mybend/core/data/datasources/local_storage_datasource.dart';
 import 'package:mybend/features/babel/babel_cubit.dart';
+import 'package:mybend/features/babel/usecases/add_babel_content_usecase.dart';
 import 'package:mybend/features/babel/usecases/get_babel_contents_usecase.dart';
+import 'package:mybend/features/babel/usecases/update_babel_content_usecase.dart';
 import 'package:mybend/features/home/home_cubit.dart';
 import 'package:mybend/features/signup/signup_cubit.dart';
 import 'package:mybend/features/signup/usecases/signup_create_user_usecase.dart';
@@ -20,6 +22,10 @@ void setupDependencyInjection() {
       AuthCreateUserUseCase(getIt<LocalStorageRepository>()));
   getIt.registerSingleton<GetBabelContentsUseCase>(
       GetBabelContentsUseCase(getIt<LocalStorageRepository>()));
+  getIt.registerSingleton<AddBabelContentUseCase>(
+      AddBabelContentUseCase(getIt<LocalStorageRepository>()));
+  getIt.registerSingleton<UpdateBabelContentUseCase>(
+      UpdateBabelContentUseCase(getIt<LocalStorageRepository>()));
       getIt.registerLazySingleton(() => AuthCubit());
   getIt.registerLazySingleton(() => SignupCubit(authCubit: getIt<AuthCubit>()));
   getIt.registerLazySingleton(() => HomeCubit(authCubit: getIt<AuthCubit>()));
