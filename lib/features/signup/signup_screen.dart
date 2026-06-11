@@ -34,7 +34,9 @@ class SignupScreen extends CubitScreen<SignupCubit, DataState> {
                 ),
               ],
             ),
-            SignUpContent(onValidate: (value) => cubit.signup(value)),
+            SignUpContent(
+                onValidate: (username, password) =>
+                    cubit.signup(username, password)),
             switch (state) {
               Loading() => const CircularProgressIndicator(),
               Error(message: final message) => Text(message),
@@ -49,7 +51,7 @@ class SignupScreen extends CubitScreen<SignupCubit, DataState> {
 class SignUpContent extends StatefulWidget {
   const SignUpContent({super.key, required this.onValidate});
 
-  final void Function(String) onValidate;
+  final void Function(String, String) onValidate;
 
   @override
   State<SignUpContent> createState() => _SignUpContentState();
@@ -57,6 +59,7 @@ class SignUpContent extends StatefulWidget {
 
 class _SignUpContentState extends State<SignUpContent> {
   String? username;
+  String? password;
 
   @override
   Widget build(BuildContext context) {
@@ -64,11 +67,15 @@ class _SignUpContentState extends State<SignUpContent> {
       children: [
         TextField(
           onChanged: (value) => setState(() => username = value),
-          decoration: const InputDecoration(hintText: 'Notre Nom'),
+          decoration: const InputDecoration(hintText: 'Username'),
         ),
-        if (username.isNotNullOrEmpty)
+        TextField(
+          onChanged: (value) => setState(() => password = value),
+          decoration: const InputDecoration(hintText: 'Password'),
+        ),
+        if (username.isNotNullOrEmpty && password.isNotNullOrEmpty)
           CupertinoButton(
-            onPressed: () => widget.onValidate(username!),
+            onPressed: () => widget.onValidate(username!, password!),
             child: const Text('Valider'),
           ),
       ],

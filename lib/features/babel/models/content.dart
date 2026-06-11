@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 enum ContentType {
-  book('Livre', Icons.book),
-  movie('Film', Icons.movie),
-  jeux('Jeux', Icons.games);
+  book('book', Icons.book),
+  movie('movie', Icons.movie),
+  jeux('games', Icons.games);
 
   const ContentType(this.name, this.icon);
 
@@ -12,7 +12,7 @@ enum ContentType {
 }
 
 enum ContentStatus {
-  todo('Do'),
+  todo('Todo'),
   doing('Doing'),
   done('Done');
 
@@ -29,14 +29,13 @@ class Content {
     required this.time,
     this.rating = 0,
     this.status = ContentStatus.todo,
-    this.comments,
+    this.comment,
     this.imageUrl,
   });
 
   factory Content.fromJson(Map<String, Object?> data) {
-    final rawRating = data['rating'];
+    final rawRating = data['rate'];
     final rating = rawRating != null ? int.parse(rawRating.toString()) : 0;
-
     return Content(
       id: data['id'] != null ? int.parse(data['id'].toString()) : -1,
       name: data['name']?.toString() ?? '',
@@ -47,9 +46,11 @@ class Content {
       rating: rating.clamp(0, 5),
       time: data['time'] != null ? int.parse(data['time'].toString()) : 0,
       status: data['status'] != null
-          ? ContentStatus.values.byName(data['status'].toString())
+          ? ContentStatus.values
+              .where((e) => e.label == data['status'].toString())
+              .first
           : ContentStatus.todo,
-      comments: data['comments']?.toString(),
+      comment: data['comment']?.toString(),
       imageUrl: data['imageUrl']?.toString(),
     );
   }
@@ -60,17 +61,20 @@ class Content {
   final int time;
   final int rating;
   final ContentStatus status;
-  final String? comments;
+  final String? comment;
   final String? imageUrl;
 
-  Map<String, Object?> toJson() => {
-        'id': id,
-        'time': time,
-        'name': name,
-        'type': type.name,
-        'rating': rating,
-        'status': status.name,
-        'comments': comments,
-        if (imageUrl != null) 'imageUrl': imageUrl,
-      };
+  Map<String, Object?> toJson() {
+    final res = {
+      'id': id.toString(),
+      'time': time,
+      'name': name,
+      'type': type.name,
+      'rate': rating,
+      'status': status.label,
+      'comment': comment,
+      if (imageUrl != null) 'imageUrl': imageUrl,
+    };
+    return res;
+  }
 }

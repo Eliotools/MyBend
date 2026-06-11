@@ -38,7 +38,8 @@ class AppRouter {
           routes: [
             GoRoute(
               path: 'add',
-              builder: (context, state) => AddContentScreen(callback: (content) {
+              builder: (context, state) =>
+                  AddContentScreen(callback: (content) {
                 getIt<BabelCubit>().addContent(content);
               }),
             ),
@@ -66,7 +67,6 @@ class AppRouter {
   String? _redirect(BuildContext context, GoRouterState state) {
     final authStatus = authCubit.state;
     final location = state.matchedLocation;
-
     switch (authStatus) {
       case const Initial():
       case const Loading():

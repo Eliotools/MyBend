@@ -4,37 +4,30 @@ import 'package:mybend/core/data/datasources/local_storage_datasource.dart';
 import 'package:mybend/core/data/datasources/tmdb_datasource.dart';
 import 'package:mybend/core/data/repositories/tmdb_repository.dart';
 import 'package:mybend/features/babel/babel_cubit.dart';
-import 'package:mybend/features/babel/usecases/add_babel_content_usecase.dart';
-import 'package:mybend/features/babel/usecases/get_babel_contents_usecase.dart';
-import 'package:mybend/features/babel/usecases/get_movie_poster_usecase.dart';
-import 'package:mybend/features/babel/usecases/update_babel_content_usecase.dart';
 import 'package:mybend/features/home/home_cubit.dart';
 import 'package:mybend/features/signup/signup_cubit.dart';
-import 'package:mybend/features/signup/usecases/signup_create_user_usecase.dart';
-import 'package:mybend/core/auth/usecases/auth_user_exite_usecase.dart';
 import 'package:mybend/core/auth/auth_cubit.dart';
+import 'package:mybend/core/data/datasources/auth_datasource.dart';
+import 'package:mybend/core/data/repositories/auth_repository.dart';
+import 'package:mybend/core/data/datasources/babel_datasource.dart';
+import 'package:mybend/core/data/repositories/babel_repository.dart';
 
 final getIt = GetIt.instance;
 
 void setupDependencyInjection() {
   getIt.registerSingleton<LocalStorageRepository>(LocalStorageRepositoryImpl(
       localStorageDataSource: LocalStorageDataSourceImpl()));
+  getIt.registerSingleton<BabelDataSource>(BabelDataSourceImpl());
+  getIt.registerSingleton<BabelRepository>(
+      BabelRepositoryImpl(getIt<BabelDataSource>()));
+  getIt.registerSingleton<AuthDataSource>(AuthDataSourceImpl());
+  getIt.registerSingleton<AuthRepository>(
+      AuthRepositoryImpl(getIt<AuthDataSource>()));
   getIt.registerSingleton<TmdbDataSource>(TmdbDataSourceImpl());
   getIt.registerSingleton<TmdbRepository>(
       TmdbRepositoryImpl(tmdbDataSource: getIt<TmdbDataSource>()));
-  getIt.registerSingleton<AuthUserExiteUseCase>(
-      AuthUserExiteUseCase(getIt<LocalStorageRepository>()));
-  getIt.registerSingleton<AuthCreateUserUseCase>(
-      AuthCreateUserUseCase(getIt<LocalStorageRepository>()));
-  getIt.registerSingleton<GetBabelContentsUseCase>(
-      GetBabelContentsUseCase(getIt<LocalStorageRepository>()));
-  getIt.registerSingleton<AddBabelContentUseCase>(
-      AddBabelContentUseCase(getIt<LocalStorageRepository>()));
-  getIt.registerSingleton<UpdateBabelContentUseCase>(
-      UpdateBabelContentUseCase(getIt<LocalStorageRepository>()));
-  getIt.registerSingleton<GetMoviePosterUseCase>(
-      GetMoviePosterUseCase(getIt<TmdbRepository>()));
   getIt.registerLazySingleton(() => AuthCubit());
+  //TODO(refactor cubit): move to factory
   getIt.registerLazySingleton(() => SignupCubit());
   getIt.registerLazySingleton(() => HomeCubit());
   getIt.registerLazySingleton(() => BabelCubit());

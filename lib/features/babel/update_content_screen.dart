@@ -38,7 +38,7 @@ class _UpdateContentScreenState extends State<UpdateContentScreen> {
     imageUrl = widget.content.imageUrl;
     _nameController = TextEditingController(text: widget.content.name);
     _commentsController =
-        TextEditingController(text: widget.content.comments ?? '');
+        TextEditingController(text: widget.content.comment ?? '');
   }
 
   @override
@@ -64,11 +64,10 @@ class _UpdateContentScreenState extends State<UpdateContentScreen> {
         time: widget.content.time,
         rating: rating,
         status: selectedStatus,
-        comments: _commentsController.text.trim().isEmpty
+        comment: _commentsController.text.trim().isEmpty
             ? null
             : _commentsController.text.trim(),
-        imageUrl:
-            selectedType == ContentType.movie ? imageUrl : null,
+        imageUrl: selectedType == ContentType.movie ? imageUrl : null,
       ),
     );
 
@@ -80,108 +79,105 @@ class _UpdateContentScreenState extends State<UpdateContentScreen> {
     return Scaffold(
       appBar: AppBar(title: const Text('Update content')),
       body: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Row(
-              children: ContentType.values
-                  .map(
-                    (type) => Expanded(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
+            children: ContentType.values
+                .map(
+                  (type) => Expanded(
                       child: CustomContainer(
-                        small :true,
-                        selected: selectedType == type,
-                        child: InkWell(
-                            onTap: () => setState(() {
-                              selectedType = type;
-                              if (type != ContentType.movie) imageUrl = null;
-                            }),
-                            borderRadius: BorderRadius.circular(8),
-                            child: Padding(
-                              padding: const EdgeInsets.all(16),
-                              child: Column(
-                                children: [
-                                  Icon(type.icon),
-                                  Text(type.name),
-                                ],
-                              ),
-                            ),
-                          ),
-                      )
-                    ),
-                  )
-                  .toList(),
-            ),
-            const SizedBox(height: 24),
-            TextField(
-              controller: _nameController,
-              onChanged: (value) {
-                if (selectedType != ContentType.movie) {
-                  setState(() => imageUrl = null);
-                }
-              },
-              decoration: const InputDecoration(hintText: 'Nom'),
-            ),
-            if (selectedType == ContentType.movie) ...[
-              const SizedBox(height: 16),
-              MoviePosterPreview(
-                movieName: _nameController.text,
-                initialUrl: imageUrl,
-                onPosterUrlChanged: (url) => imageUrl = url,
-              ),
-            ],
-            const SizedBox(height: 16),
-            Center(
-              child: StarRatingButton(
-                rating: rating,
-                onRatingChanged: (value) => setState(() => rating = value),
-              ),
-            ),
-            const SizedBox(height: 16),
-            Row(
-              //TODO: make this reusable (cf add content)
-              children: ContentStatus.values
-                  .map(
-                    (status) => Expanded(
+                    small: true,
+                    selected: selectedType == type,
+                    child: InkWell(
+                      onTap: () => setState(() {
+                        selectedType = type;
+                        if (type != ContentType.movie) imageUrl = null;
+                      }),
+                      borderRadius: BorderRadius.circular(8),
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 4),
-                        child: CustomContainer(
-                          selected: selectedStatus == status,
-                        small :true,
-
-                          child: InkWell(
-                            onTap: () =>
-                                setState(() => selectedStatus = status),
-                            borderRadius: BorderRadius.circular(8),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 12),
-                              child: Text(
-                                status.label,
-                                textAlign: TextAlign.center,
-                                style: AppTheme.textTheme.bodyMedium,
-                              ),
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          children: [
+                            Icon(type.icon),
+                            Text(type.name),
+                          ],
+                        ),
+                      ),
+                    ),
+                  )),
+                )
+                .toList(),
+          ),
+          const SizedBox(height: 24),
+          TextField(
+            controller: _nameController,
+            onChanged: (value) {
+              if (selectedType != ContentType.movie) {
+                setState(() => imageUrl = null);
+              }
+            },
+            decoration: const InputDecoration(hintText: 'Nom'),
+          ),
+          if (selectedType == ContentType.movie) ...[
+            const SizedBox(height: 16),
+            MoviePosterPreview(
+              movieName: _nameController.text,
+              initialUrl: imageUrl,
+              onPosterUrlChanged: (url) => imageUrl = url,
+            ),
+          ],
+          const SizedBox(height: 16),
+          Center(
+            child: StarRatingButton(
+              rating: rating,
+              onRatingChanged: (value) => setState(() => rating = value),
+            ),
+          ),
+          const SizedBox(height: 16),
+          Row(
+            //TODO: make this reusable (cf add content)
+            children: ContentStatus.values
+                .map(
+                  (status) => Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      child: CustomContainer(
+                        selected: selectedStatus == status,
+                        small: true,
+                        child: InkWell(
+                          onTap: () => setState(() => selectedStatus = status),
+                          borderRadius: BorderRadius.circular(8),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            child: Text(
+                              status.label,
+                              textAlign: TextAlign.center,
+                              style: AppTheme.textTheme.bodyMedium,
                             ),
                           ),
                         ),
                       ),
                     ),
-                  )
-                  .toList(),
+                  ),
+                )
+                .toList(),
+          ),
+          const SizedBox(height: 16),
+          TextField(
+            controller: _commentsController,
+            decoration: const InputDecoration(hintText: 'Commentaires'),
+            maxLines: 3,
+          ),
+          const Spacer(),
+          CupertinoButton.filled(
+            onPressed: _save,
+            child: Text(
+              'Modifier',
+              style: AppTheme.textTheme.bodyMedium,
             ),
-            const SizedBox(height: 16),
-            TextField(
-              controller: _commentsController,
-              decoration: const InputDecoration(hintText: 'Commentaires'),
-              maxLines: 3,
-            ),
-            const Spacer(),
-            CupertinoButton.filled(
-              onPressed: _save,
-              child: Text(
-                'Modifier',
-                style: AppTheme.textTheme.bodyMedium,
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
+      ),
     );
   }
 }

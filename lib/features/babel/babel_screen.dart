@@ -47,6 +47,7 @@ class BabelScreen extends CubitScreen<BabelCubit, DataState> {
         _ => const SizedBox.shrink(),
       };
 }
+
 //This could be in a separated file
 class BabelContent extends StatefulWidget {
   const BabelContent({
@@ -145,16 +146,18 @@ class _BabelContentState extends State<BabelContent> {
                             ),
                           ],
                         ),
-                           if (content.rating > 0) ...[
-                            Row(children: [
+                        if (content.rating > 0) ...[
+                          Row(
+                            children: [
                               const Spacer(),
                               StarRating(rating: content.rating, size: 20),
-                            ],)
                             ],
-                        if (content.comments?.isNotEmpty ?? false) ...[
+                          )
+                        ],
+                        if (content.comment?.isNotEmpty ?? false) ...[
                           const SizedBox(height: 4),
                           Text(
-                            content.comments!,
+                            content.comment!,
                             style: AppTheme.textTheme.bodySmall,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
