@@ -30,31 +30,33 @@ class HomeScreen extends CubitScreen<HomeCubit, DataState> {
               childAspectRatio: 1,
               children: [
                 CustomContainer(
-                  color: Colors.green,
                   child: InkWell(
                     onTap: () => context.push('/babel'),
                     child: const Center(child: Text('Babel')),
                   ),
                 ),
                 CustomContainer(
-                  color: Colors.blue,
                   child: InkWell(
                     onTap: () => context.push('/alexandry'),
                     child: const Center(child: Text('Alexandry')),
                   ),
                 ),
                 CustomContainer(
-                  color: Colors.purple,
                   child: InkWell(
                     onTap: () => context.push('/mybend'),
                     child: const Center(child: Text('My Bend')),
                   ),
                 ),
                 CustomContainer(
-                  color: Colors.orange,
                   child: InkWell(
                     onTap: () => context.push('/sudoku'),
                     child: const Center(child: Text('Sudoky')),
+                  ),
+                ),
+                CustomContainer(
+                  child: InkWell(
+                    onTap: () => context.push('/todo'),
+                    child: const Center(child: Text('Todo')),
                   ),
                 ),
               ],

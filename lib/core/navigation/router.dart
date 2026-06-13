@@ -11,6 +11,7 @@ import 'package:mybend/features/babel/models/content.dart';
 import 'package:mybend/features/babel/update_content_screen.dart';
 import 'package:mybend/features/home/home_screen.dart';
 import 'package:mybend/features/signup/signup_screen.dart';
+import 'package:mybend/features/todo/todo_screen.dart';
 import 'package:mybend/src/shared/data_state.dart';
 
 class AppRouter {
@@ -31,6 +32,10 @@ class AppRouter {
         GoRoute(
           path: '/home',
           builder: (context, state) => const HomeScreen(),
+        ),
+        GoRoute(
+          path: '/todo',
+          builder: (context, state) => const TodoScreen(),
         ),
         GoRoute(
           path: '/babel',

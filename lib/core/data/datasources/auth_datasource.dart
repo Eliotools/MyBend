@@ -2,8 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:mybend/core/auth/auth_cubit.dart';
-import 'package:mybend/core/di/injections.dart';
 
 const String apiUrl = 'https://api.meliot.tools/auth';
 
