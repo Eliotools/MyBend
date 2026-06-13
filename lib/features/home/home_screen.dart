@@ -37,8 +37,8 @@ class HomeScreen extends CubitScreen<HomeCubit, DataState> {
                 ),
                 CustomContainer(
                   child: InkWell(
-                    onTap: () => context.push('/alexandry'),
-                    child: const Center(child: Text('Alexandry')),
+                    onTap: () => context.push('/alexandrie'),
+                    child: const Center(child: Text('Alexandrie')),
                   ),
                 ),
                 CustomContainer(

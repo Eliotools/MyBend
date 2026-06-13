@@ -14,6 +14,9 @@ import 'package:mybend/core/data/datasources/babel_datasource.dart';
 import 'package:mybend/core/data/datasources/todo_datasource.dart';
 import 'package:mybend/core/data/repositories/babel_repository.dart';
 import 'package:mybend/core/data/repositories/todo_repository.dart';
+import 'package:mybend/features/alexandrie/alexandrie_cubit.dart';
+import 'package:mybend/core/data/datasources/alexandrie_datasource.dart';
+import 'package:mybend/core/data/repositories/alexandrie_repository.dart';
 
 final getIt = GetIt.instance;
 
@@ -23,6 +26,10 @@ void setupDependencyInjection() {
   getIt.registerSingleton<BabelDataSource>(BabelDataSourceImpl());
   getIt.registerSingleton<BabelRepository>(
       BabelRepositoryImpl(getIt<BabelDataSource>()));
+  getIt.registerSingleton<AlexandrieDataSource>(
+      AlexDataSourceImpl.AlexandrieDataSourceImpl());
+  getIt.registerSingleton<AlexandrieRepository>(
+      AlexandrieRepositoryImpl(getIt<AlexandrieDataSource>()));
   getIt.registerSingleton<TodoDataSource>(TodoDataSourceImpl());
   getIt.registerSingleton<TodoRepository>(
       TodoRepositoryImpl(getIt<TodoDataSource>()));
@@ -39,4 +46,5 @@ void setupDependencyInjection() {
   getIt.registerLazySingleton(() => HomeCubit());
   getIt.registerLazySingleton(() => BabelCubit());
   getIt.registerLazySingleton(() => TodoCubit());
+  getIt.registerLazySingleton(() => AlexandrieCubit());
 }

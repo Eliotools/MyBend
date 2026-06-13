@@ -13,6 +13,7 @@ import 'package:mybend/features/home/home_screen.dart';
 import 'package:mybend/features/signup/signup_screen.dart';
 import 'package:mybend/features/todo/todo_screen.dart';
 import 'package:mybend/src/shared/data_state.dart';
+import 'package:mybend/features/alexandrie/alexandrie_screen.dart';
 
 class AppRouter {
   AppRouter(this.authCubit) {
@@ -59,6 +60,10 @@ class AppRouter {
               },
             ),
           ],
+        ),
+        GoRoute(
+          path: '/alexandrie',
+          builder: (context, state) => const AlexandrieScreen(),
         ),
       ],
     );
