@@ -5,7 +5,7 @@ import 'package:mybend/core/themes/app_theme.dart';
 import 'package:mybend/features/babel/models/content.dart';
 import 'package:mybend/features/babel/widgets/movie_poster_preview.dart';
 import 'package:mybend/features/babel/widgets/star_rating.dart';
-import 'package:mybend/shared/custom_container.dart';
+import 'package:mybend/shared/ui/custom_container.dart';
 
 class AddContentScreen extends StatefulWidget {
   const AddContentScreen({super.key, required this.callback});

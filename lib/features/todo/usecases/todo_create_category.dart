@@ -6,6 +6,6 @@ class TodoCreateCategoryUseCase {
 
   final TodoRepository _todoRepository;
 
-  Future<void> call(TodoCategory category) async =>
+  Future<TodoCategory> call(TodoCategory category) async =>
       _todoRepository.createCategory(category);
 }

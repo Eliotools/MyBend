@@ -5,8 +5,12 @@ import 'package:mybend/features/todo/models/todo_item.dart';
 import 'package:mybend/features/todo/todo_cubit.dart';
 import 'package:mybend/features/todo/usecases/toto_load.dart';
 import 'package:mybend/shared/cubit_screen.dart';
-import 'package:mybend/shared/custom_container.dart';
+import 'package:mybend/features/todo/todo_card.dart';
+import 'package:mybend/shared/ui/selector.dart';
 import 'package:mybend/src/shared/data_state.dart';
+import 'package:mybend/features/todo/todo_add_modal.dart';
+import 'package:gap/gap.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TodoScreen extends CubitScreen<TodoCubit, DataState> {
   const TodoScreen({super.key});
@@ -18,44 +22,21 @@ class TodoScreen extends CubitScreen<TodoCubit, DataState> {
   void Function(TodoCubit cubit)? get onInit => (cubit) => cubit.load();
 
   @override
-  Widget? get floatingActionButton => Builder(
-        builder: (context) => FloatingActionButton(
-          onPressed: () => _showAddDialog(context),
-          child: const Icon(Icons.add, color: Colors.white),
-        ),
-      );
-
-  Future<void> _showAddDialog(BuildContext context) async {
-    final controller = TextEditingController();
-    await showDialog<TodoItem>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('New todo'),
-        content: TextField(
-          controller: controller,
-          autofocus: true,
-          decoration: const InputDecoration(hintText: 'Title'),
-          onSubmitted: (_) =>
-              Navigator.pop(context, TodoItem(name: controller.text)),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+  Widget Function(BuildContext context,
+      DataState state)? get floatingActionButton => (context, state) => state
+          is Loaded<TodoLoadDto>
+      ? Builder(
+          builder: (context) => FloatingActionButton(
+            onPressed: () => showModalBottomSheet<TodoItem?>(
+              isScrollControlled: true,
+              context: context,
+              builder: (context) =>
+                  TodoAddModal(categories: state.data.categories),
+            ).then((value) => value != null ? cubit.createTodo(value) : null),
+            child: const Icon(Icons.add, color: Colors.white),
           ),
-          TextButton(
-            onPressed: () => Navigator.pop(
-                context, TodoItem(name: controller.text, validated: false)),
-            child: const Text('Add'),
-          ),
-        ],
-      ),
-    ).then((TodoItem? value) {
-      if (value != null) {
-        cubit.createTodo(value);
-      }
-    });
-  }
+        )
+      : const SizedBox.shrink();
 
   @override
   Widget buildPage(BuildContext context, DataState state) => switch (state) {
@@ -65,12 +46,15 @@ class TodoScreen extends CubitScreen<TodoCubit, DataState> {
         Error(message: final message) => Center(
             child: Text(message, style: AppTheme.textTheme.bodyMedium),
           ),
-        Loaded<TodoLoadDto>(data: final data) =>
-          TodoContent(todos: data.todos, categories: data.categories),
+        Loaded<TodoLoadDto>(data: final data) => TodoContent(
+            todos: data.todos,
+            categories: data.categories,
+          ),
         _ => const SizedBox.shrink(),
       };
 }
 
+//TODO(refactor): move to separate file
 class TodoContent extends StatefulWidget {
   const TodoContent({super.key, required this.todos, required this.categories});
 
@@ -82,50 +66,43 @@ class TodoContent extends StatefulWidget {
 }
 
 class _TodoContentState extends State<TodoContent> {
-  int? selectedCategoryId;
+  String? selectedCategory;
   List<TodoItem> filteredTodos = [];
 
   @override
   void initState() {
     super.initState();
-    print(widget.categories);
     filteredTodos = widget.todos;
   }
 
   @override
-  Widget build(BuildContext context) => ListView(
-    scrollDirection: Axis.vertical,
-    children: [
+  Widget build(BuildContext context) =>
+      ListView(scrollDirection: Axis.vertical, children: [
         widget.categories.isNotEmpty
-            ? Padding(
-                padding: const EdgeInsets.only(bottom: 16),
-                child: DropdownButton<int>(
-                  value: selectedCategoryId,
-                  onChanged: (selectedCategory) {
-                    setState(() {
-                      selectedCategoryId = selectedCategory;
-                      filteredTodos = widget.todos
-                          .where((todo) => todo.categoryId == selectedCategory)
-                          .toList();
-                    });
-                  },
-                  items: widget.categories
-                      .map((category) => DropdownMenuItem<int>(
-                            value: category.id,
-                            child: Text(category.name),
-                          ))
-                      .toList(),
-                ))
-            : Text('No categories'),
-        filteredTodos.isNotEmpty
-            ? ListView.separated(
-                itemCount: filteredTodos.length,
-                separatorBuilder: (context, index) => const SizedBox(height: 8),
-                itemBuilder: (context, index) => CustomContainer(
-                  small: true,
-                  child: Text(filteredTodos[index].name),
-                ),
-              )
-            : Text('No todos'),
+            ? Selector(
+                selectedItem: selectedCategory ?? '*',
+                items:
+                    widget.categories.map((category) => category.name).toList(),
+                onSelected: (value) => setState(() {
+                      selectedCategory = value;
+                      if (value == '*') {
+                        filteredTodos = widget.todos;
+                      } else {
+                        final valueId = widget.categories
+                            .firstWhere((category) => category.name == value)
+                            .id;
+                        filteredTodos = widget.todos
+                            .where((todo) => todo.categoryId == valueId)
+                            .toList();
+                      }
+                    }),
+                onAdd: (value) => context
+                    .read<TodoCubit>()
+                    .createCategory(TodoCategory(name: value)))
+            : const Text('No categories'),
+        const Gap(16),
+        ...filteredTodos.map((todo) => TodoCard(
+              todo: todo,
+            ))
       ]);
 }

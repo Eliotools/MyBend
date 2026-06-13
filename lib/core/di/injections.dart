@@ -34,6 +34,7 @@ void setupDependencyInjection() {
       TmdbRepositoryImpl(tmdbDataSource: getIt<TmdbDataSource>()));
   getIt.registerLazySingleton(() => AuthCubit());
   //TODO(refactor cubit): move to factory
+  //TODO(BUG): page dont reload and crash :(
   getIt.registerLazySingleton(() => SignupCubit());
   getIt.registerLazySingleton(() => HomeCubit());
   getIt.registerLazySingleton(() => BabelCubit());

@@ -6,5 +6,5 @@ class TodoUpdateUseCase {
 
   final TodoRepository _todoRepository;
 
-  Future<void> call(TodoItem todo) async => _todoRepository.updateTodo(todo);
+  Future<TodoItem> call(TodoItem todo) async => _todoRepository.updateTodo(todo);
 }

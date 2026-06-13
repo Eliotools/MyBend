@@ -2,7 +2,7 @@ class TodoItem {
   const TodoItem({
     this.id = -1,
     this.categoryId,
-    required this.name,
+    this.name = 'no name',
     this.description,
     this.validated = false,
   });
@@ -21,16 +21,17 @@ class TodoItem {
             data['validated']?.toString() == 'true',
         categoryId: data['categoryId'] != null
             ? int.parse(data['categoryId'].toString())
-            : -1,
+            : null,
       );
+  factory TodoItem.empty() => const TodoItem();
 
+//TODO(refactor): do this for each class (maybe create a mixin)
   TodoItem copyWith({
     int? id,
     int? categoryId,
     String? name,
     String? description,
     bool? validated,
-    bool? isDone,
   }) =>
       TodoItem(
         id: id ?? this.id,

@@ -1,10 +1,10 @@
 import 'package:mybend/core/data/repositories/todo_repository.dart';
 import 'package:mybend/features/todo/models/todo_item.dart';
 
-class TodoCreateUseCase {
-  TodoCreateUseCase(this._todoRepository);
+class TodoArchiveUseCase {
+  TodoArchiveUseCase(this._todoRepository);
 
   final TodoRepository _todoRepository;
 
-  Future<TodoItem> call(TodoItem todo) async => _todoRepository.createTodo(todo);
+  Future<bool> call(TodoItem todo) async => _todoRepository.archiveTodo(todo);
 }

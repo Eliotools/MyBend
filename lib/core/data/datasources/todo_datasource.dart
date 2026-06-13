@@ -11,9 +11,10 @@ const String todoApiUrl = 'https://api.meliot.tools/todo';
 abstract class TodoDataSource {
   Future<List<TodoItem>> getTodos();
   Future<List<TodoCategory>> getCategories();
-  Future<void> createTodo(TodoItem todo);
-  Future<void> updateTodo(TodoItem todo);
-  Future<void> createCategory(TodoCategory category);
+  Future<TodoItem> createTodo(TodoItem todo);
+  Future<TodoItem> updateTodo(TodoItem todo);
+  Future<TodoCategory> createCategory(TodoCategory category);
+  Future<bool> archiveTodo(TodoItem todo);
 }
 
 class TodoDataSourceImpl implements TodoDataSource {
@@ -31,14 +32,13 @@ class TodoDataSourceImpl implements TodoDataSource {
     if (response.statusCode != 200) {
       throw Exception('Failed to get todos: ${response.body}');
     }
-    print(response.body);
-    print(response.statusCode);
     final body = jsonDecode(response.body) as List<dynamic>;
-    return body
+    final todos = body
         .map(
           (todo) => TodoItem.fromJson(Map<String, Object?>.from(todo as Map)),
         )
         .toList();
+    return todos;
   }
 
   @override
@@ -48,8 +48,6 @@ class TodoDataSourceImpl implements TodoDataSource {
     if (response.statusCode != 200) {
       throw Exception('Failed to get categories: ${response.body}');
     }
-    print(response.body);
-    print(response.statusCode);
     final body = jsonDecode(response.body) as List<dynamic>;
     return body
         .map(
@@ -60,21 +58,20 @@ class TodoDataSourceImpl implements TodoDataSource {
   }
 
   @override
-  Future<void> createTodo(TodoItem todo) async {
+  Future<TodoItem> createTodo(TodoItem todo) async {
     final response = await http.post(
       Uri.parse('$todoApiUrl/'),
       headers: _headers,
       body: jsonEncode(todo.toJson()),
     );
-    print(response.body);
-    print(response.statusCode);
     if (response.statusCode != 200 && response.statusCode != 201) {
       throw Exception('Failed to add todo: ${response.body}');
     }
+    return TodoItem.fromJson(jsonDecode(response.body));
   }
 
   @override
-  Future<void> updateTodo(TodoItem todo) async {
+  Future<TodoItem> updateTodo(TodoItem todo) async {
     final response = await http.put(
       Uri.parse('$todoApiUrl/${todo.id}'),
       headers: _headers,
@@ -83,16 +80,32 @@ class TodoDataSourceImpl implements TodoDataSource {
     if (response.statusCode != 200) {
       throw Exception('Failed to update todo: ${response.body}');
     }
+    return TodoItem.fromJson(jsonDecode(response.body));
   }
 
   @override
-  Future<void> createCategory(TodoCategory category) async {
-    final response = await http.delete(
-      Uri.parse('$todoApiUrl/category'),
+  Future<TodoCategory> createCategory(TodoCategory category) async {
+    final response = await http.post(
+      Uri.parse('$todoApiUrl/categories'),
       headers: _headers,
+      body: jsonEncode(category.toJson()),
     );
     if (response.statusCode != 200 && response.statusCode != 204) {
-      throw Exception('Failed to delete todo: ${response.body}');
+      throw Exception('Failed to create category: ${response.body}');
     }
+    return TodoCategory.fromJson(jsonDecode(response.body));
+  }
+
+  @override
+  Future<bool> archiveTodo(TodoItem todo) async {
+    final response = await http.put(
+      Uri.parse('$todoApiUrl/${todo.id}'),
+      headers: _headers,
+      body: jsonEncode({'archived': true}),
+    );
+    if (response.statusCode != 200) {
+      throw Exception('Failed to archive todo: ${response.body}');
+    }
+    return true;
   }
 }

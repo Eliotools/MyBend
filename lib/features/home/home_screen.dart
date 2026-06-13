@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mybend/core/themes/app_theme.dart';
 import 'package:mybend/features/home/home_cubit.dart';
 import 'package:mybend/shared/cubit_screen.dart';
-import 'package:mybend/shared/custom_container.dart';
+import 'package:mybend/shared/ui/custom_container.dart';
 import 'package:mybend/src/shared/data_state.dart';
 
 class HomeScreen extends CubitScreen<HomeCubit, DataState> {

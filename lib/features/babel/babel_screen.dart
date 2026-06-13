@@ -6,7 +6,7 @@ import 'package:mybend/features/babel/babel_cubit.dart';
 import 'package:mybend/features/babel/models/content.dart';
 import 'package:mybend/features/babel/widgets/star_rating.dart';
 import 'package:mybend/shared/cubit_screen.dart';
-import 'package:mybend/shared/custom_container.dart';
+import 'package:mybend/shared/ui/custom_container.dart';
 import 'package:mybend/src/shared/data_state.dart';
 
 class BabelScreen extends CubitScreen<BabelCubit, DataState> {
@@ -19,14 +19,15 @@ class BabelScreen extends CubitScreen<BabelCubit, DataState> {
   String get name => 'Babel';
 
   @override
-  Widget get floatingActionButton => Builder(
-        builder: (context) => FloatingActionButton(
-          onPressed: () async {
-            await context.push<bool>('/babel/add');
-          },
-          child: const Icon(Icons.add, color: Colors.white),
-        ),
-      );
+  Widget Function(BuildContext context, DataState state)?
+      get floatingActionButton => (context, state) => Builder(
+            builder: (context) => FloatingActionButton(
+              onPressed: () async {
+                await context.push<bool>('/babel/add');
+              },
+              child: const Icon(Icons.add, color: Colors.white),
+            ),
+          );
 
   @override
   Widget buildPage(BuildContext context, DataState state) => switch (state) {

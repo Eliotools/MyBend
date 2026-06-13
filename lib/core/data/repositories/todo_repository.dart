@@ -5,9 +5,10 @@ import 'package:mybend/features/todo/models/todo_category.dart';
 abstract class TodoRepository {
   Future<List<TodoItem>> getTodos();
   Future<List<TodoCategory>> getCategories();
-  Future<void> createTodo(TodoItem todo);
-  Future<void> updateTodo(TodoItem todo);
-  Future<void> createCategory(TodoCategory category);
+  Future<TodoItem> createTodo(TodoItem todo);
+  Future<TodoItem> updateTodo(TodoItem todo);
+  Future<TodoCategory> createCategory(TodoCategory category);
+  Future<bool> archiveTodo(TodoItem todo);
 }
 
 class TodoRepositoryImpl implements TodoRepository {
@@ -19,15 +20,20 @@ class TodoRepositoryImpl implements TodoRepository {
   Future<List<TodoItem>> getTodos() => _todoDataSource.getTodos();
 
   @override
-  Future<void> createTodo(TodoItem todo) => _todoDataSource.createTodo(todo);
+  Future<TodoItem> createTodo(TodoItem todo) =>
+      _todoDataSource.createTodo(todo);
 
   @override
-  Future<void> updateTodo(TodoItem todo) => _todoDataSource.updateTodo(todo);
+  Future<TodoItem> updateTodo(TodoItem todo) =>
+      _todoDataSource.updateTodo(todo);
 
   @override
-  Future<void> createCategory(TodoCategory category) =>
+  Future<TodoCategory> createCategory(TodoCategory category) =>
       _todoDataSource.createCategory(category);
 
   @override
   Future<List<TodoCategory>> getCategories() => _todoDataSource.getCategories();
+
+  @override
+  Future<bool> archiveTodo(TodoItem todo) => _todoDataSource.archiveTodo(todo);
 }

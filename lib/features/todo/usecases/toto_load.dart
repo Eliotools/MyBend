@@ -14,8 +14,9 @@ class TodoLoadUseCase {
 
   final TodoRepository _todoRepository;
 
-  Future<TodoLoadDto> call() async => TodoLoadDto(
-        todos: await _todoRepository.getTodos(),
-        categories: await _todoRepository.getCategories(),
-      );
+  Future<TodoLoadDto> call() async {
+    final todos = await _todoRepository.getTodos();
+    final categories = await _todoRepository.getCategories();
+    return TodoLoadDto(todos: todos, categories: categories);
+  }
 }
