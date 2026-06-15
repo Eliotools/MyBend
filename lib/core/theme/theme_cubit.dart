@@ -3,11 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mybend/core/constantes/local_storage_key.dart';
 import 'package:mybend/core/data/repositories/local_storage_repository.dart';
 import 'package:mybend/core/di/injections.dart';
-import 'package:mybend/core/themes/dark_theme.dart';
-import 'package:mybend/core/themes/glass_theme.dart';
-import 'package:mybend/core/themes/green_theme.dart';
-import 'package:mybend/core/themes/light_theme.dart';
-import 'package:mybend/core/themes/minimal_theme.dart';
+import 'package:mybend/core/themes/app_theme.dart';
 
 const themeKeys = ['dark', 'light', 'glass', 'minimal', 'green'];
 

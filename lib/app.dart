@@ -5,7 +5,7 @@ import 'package:mybend/core/auth/auth_cubit.dart';
 import 'package:mybend/core/di/injections.dart';
 import 'package:mybend/core/navigation/router.dart';
 import 'package:mybend/core/theme/theme_cubit.dart';
-import 'package:mybend/core/themes/dark_theme.dart';
+import 'package:mybend/core/themes/app_theme.dart';
 
 class App extends StatelessWidget {
   App({super.key});
@@ -16,14 +16,13 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: BlocProvider.value(
-        value: _themeCubit,
-        child: BlocBuilder<ThemeCubit, String>(
-          builder: (context, themeKey) => MaterialApp.router(
-            routerConfig: _router,
-            theme: colorMap[themeKey] ?? darkTheme,
-          ),
+    return BlocProvider.value(
+      value: _themeCubit,
+      child: BlocBuilder<ThemeCubit, String>(
+        builder: (context, themeKey) => MaterialApp.router(
+          routerConfig: _router,
+          theme: colorMap[themeKey] ?? darkTheme,
+          debugShowCheckedModeBanner: false,
         ),
       ),
     );
