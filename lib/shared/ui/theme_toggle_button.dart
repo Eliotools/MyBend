@@ -7,8 +7,8 @@ const themeIconMap = {
   'dark': Icons.bedtime,
   'light': Icons.light_mode_outlined,
   'green': Icons.forest,
-  'purple': Icons.color_lens,
-  'red': Icons.fireplace,
+  'minimal': Icons.horizontal_rule,
+  'glass': Icons.blur_on,
 };
 
 class ThemeToggleButton extends StatelessWidget {

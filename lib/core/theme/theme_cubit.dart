@@ -4,18 +4,18 @@ import 'package:mybend/core/constantes/local_storage_key.dart';
 import 'package:mybend/core/data/repositories/local_storage_repository.dart';
 import 'package:mybend/core/di/injections.dart';
 import 'package:mybend/core/themes/dark_theme.dart';
+import 'package:mybend/core/themes/glass_theme.dart';
 import 'package:mybend/core/themes/green_theme.dart';
 import 'package:mybend/core/themes/light_theme.dart';
-import 'package:mybend/core/themes/purple_theme.dart';
-import 'package:mybend/core/themes/red_theme.dart';
+import 'package:mybend/core/themes/minimal_theme.dart';
 
-const themeKeys = ['dark', 'light', 'red', 'purple', 'green'];
+const themeKeys = ['dark', 'light', 'glass', 'minimal', 'green'];
 
 final Map<String, ThemeData> colorMap = {
   'dark': darkTheme,
   'light': lightTheme,
-  'red': redTheme,
-  'purple': purpleTheme,
+  'glass': glassTheme,
+  'minimal': minimalTheme,
   'green': greenTheme,
 };
 
@@ -32,7 +32,13 @@ class ThemeCubit extends Cubit<String> {
   Future<void> load() async {
     final value =
         await _localStorageRepository.getValue(LocalStorageKey.themeMode);
-    emit(colorMap.containsKey(value) ? value! : 'dark');
+    emit(_parseThemeKey(value));
+  }
+
+  String _parseThemeKey(String? value) {
+    if (value == 'red') return 'glass';
+    if (value == 'purple') return 'minimal';
+    return colorMap.containsKey(value) ? value! : 'dark';
   }
 
   Future<void> toggle() async {

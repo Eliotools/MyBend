@@ -22,7 +22,6 @@ class App extends StatelessWidget {
         builder: (context, themeKey) => MaterialApp.router(
           routerConfig: _router,
           theme: colorMap[themeKey] ?? darkTheme,
-          themeMode: ThemeMode.dark,
         ),
       ),
     );
