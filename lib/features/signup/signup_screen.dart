@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:mybend/features/signup/signup_cubit.dart';
@@ -13,38 +12,34 @@ class SignupScreen extends CubitScreen<SignupCubit, DataState> {
   String get name => 'Signup';
 
   @override
-  Widget buildPage(BuildContext context, DataState state) => Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            const Column(
-              children: [
-                Text(
-                  'Welcome on',
-                  style: TextStyle(
-                    fontSize: 25,
-                  ),
-                ),
-                Gap(4),
-                Text(
-                  'My Bend',
-                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
-            SignUpContent(
-                onValidate: (username, password) =>
-                    cubit.signup(username, password)),
-            switch (state) {
-              Loading() => const CircularProgressIndicator(),
-              Error(message: final message) => Text(message),
-              Loaded() => const Center(child: Text('User created')),
-              Initial() => const SizedBox.shrink(),
-            },
-          ],
-        ),
+  Widget buildPage(BuildContext context, DataState state) => Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Column(
+            children: [
+              Text(
+                'Welcome on',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              const Gap(4),
+              Text(
+                'My Bend',
+                style: Theme.of(context).textTheme.headlineMedium,
+              ),
+            ],
+          ),
+          SignUpContent(
+            onValidate: (username, password) =>
+                cubit.signup(username, password),
+          ),
+          switch (state) {
+            Loading() => const CircularProgressIndicator(),
+            Error(message: final message) => Text(message),
+            Loaded() => const Text('User created'),
+            Initial() => const SizedBox.shrink(),
+          },
+        ],
       );
 }
 
@@ -69,12 +64,15 @@ class _SignUpContentState extends State<SignUpContent> {
           onChanged: (value) => setState(() => username = value),
           decoration: const InputDecoration(hintText: 'Username'),
         ),
+        const Gap(12),
         TextField(
           onChanged: (value) => setState(() => password = value),
+          obscureText: true,
           decoration: const InputDecoration(hintText: 'Password'),
         ),
+        const Gap(16),
         if (username.isNotNullOrEmpty && password.isNotNullOrEmpty)
-          CupertinoButton(
+          FilledButton(
             onPressed: () => widget.onValidate(username!, password!),
             child: const Text('Valider'),
           ),

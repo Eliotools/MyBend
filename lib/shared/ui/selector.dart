@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 
 class Selector extends StatefulWidget {
   const Selector({
@@ -6,50 +7,63 @@ class Selector extends StatefulWidget {
     required this.items,
     required this.onSelected,
     required this.selectedItem,
-    required this.onAdd,
+    this.onAdd,
   });
 
   final List<String> items;
   final void Function(String item) onSelected;
   final String selectedItem;
-  final void Function(String item) onAdd;
+  final void Function(String item)? onAdd;
 
   @override
   State<Selector> createState() => _SelectorState();
 }
 
 class _SelectorState extends State<Selector> {
-  final TextEditingController _controller = TextEditingController();
+  String _newItem = '';
+
   @override
   Widget build(BuildContext context) {
-    return DropdownButton(
-        value: widget.selectedItem,
-        isExpanded: true,
-        items: [
-          DropdownMenuItem(
-            value: '',
-            child: SizedBox(
-              width: 300,
-              child: TextField(
-                  controller: _controller,
-                  onSubmitted: (value) =>
-                      setState(() => widget.onAdd(_controller.text)),
-                  decoration: InputDecoration(
-                      border:
-                          const OutlineInputBorder(borderSide: BorderSide.none),
-                      isDense: true,
-                      hintText: 'Nouvelle catégorie',
-                      suffix: IconButton(
-                          onPressed: () => widget.onAdd(_controller.text),
-                          icon: const Icon(Icons.add)))),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        DropdownMenu<String>(
+          initialSelection: widget.selectedItem,
+          label: const Text('Category'),
+          expandedInsets: EdgeInsets.zero,
+          dropdownMenuEntries: [
+            const DropdownMenuEntry(value: '*', label: 'All'),
+            ...widget.items.map(
+              (item) => DropdownMenuEntry(value: item, label: item),
             ),
+          ],
+          onSelected: (value) {
+            if (value != null) widget.onSelected(value);
+          },
+        ),
+        if (widget.onAdd != null) ...[
+          const Gap(12),
+          TextField(
+            decoration: const InputDecoration(
+              hintText: 'New category',
+            ),
+            onChanged: (value) => setState(() => _newItem = value),
+            onSubmitted: (_) => _addCategory(),
           ),
-          const DropdownMenuItem(value: '*', child: Text('*')),
-          ...widget.items
-              .map((e) => DropdownMenuItem(value: e, child: Text(e)))
-              .toList()
-        ],
-        onChanged: (value) =>
-            setState(() => widget.onSelected(value ?? widget.selectedItem)));
+          const Gap(12),
+          FilledButton.tonal(
+            onPressed:
+                _newItem.isEmpty ? null : () => widget.onAdd?.call(_newItem),
+            child: const Text('Add'),
+          ),
+        ]
+      ],
+    );
+  }
+
+  void _addCategory() {
+    if (_newItem.isEmpty) return;
+    widget.onAdd?.call(_newItem.trim());
+    setState(() => _newItem = '');
   }
 }

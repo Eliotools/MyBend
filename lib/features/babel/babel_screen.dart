@@ -24,7 +24,7 @@ class BabelScreen extends CubitScreen<BabelCubit, DataState> {
               onPressed: () async {
                 await context.push<bool>('/babel/add');
               },
-              child: const Icon(Icons.add, color: Colors.white),
+              child: const Icon(Icons.add),
             ),
           );
 
@@ -129,20 +129,10 @@ class _BabelContentState extends State<BabelContent> {
                               content.name,
                               style: Theme.of(context).textTheme.titleMedium,
                             ),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 8,
-                                vertical: 4,
-                              ),
-                              decoration: BoxDecoration(
-                                color:
-                                    context.colorScheme.primary.withAlpha(128),
-                                borderRadius: BorderRadius.circular(4),
-                              ),
-                              child: Text(
-                                content.status.label,
-                                style: Theme.of(context).textTheme.labelSmall,
-                              ),
+                            Chip(
+                              label: Text(content.status.label),
+                              visualDensity: VisualDensity.compact,
+                              padding: EdgeInsets.zero,
                             ),
                           ],
                         ),

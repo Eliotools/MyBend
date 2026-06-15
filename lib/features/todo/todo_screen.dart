@@ -32,7 +32,7 @@ class TodoScreen extends CubitScreen<TodoCubit, DataState> {
               builder: (context) =>
                   TodoAddModal(categories: state.data.categories),
             ).then((value) => value != null ? cubit.createTodo(value) : null),
-            child: const Icon(Icons.add, color: Colors.white),
+            child: const Icon(Icons.add),
           ),
         )
       : const SizedBox.shrink();
@@ -83,21 +83,19 @@ class _TodoContentState extends State<TodoContent> {
                 items:
                     widget.categories.map((category) => category.name).toList(),
                 onSelected: (value) => setState(() {
-                      selectedCategory = value;
-                      if (value == '*') {
-                        filteredTodos = widget.todos;
-                      } else {
-                        final valueId = widget.categories
-                            .firstWhere((category) => category.name == value)
-                            .id;
-                        filteredTodos = widget.todos
-                            .where((todo) => todo.categoryId == valueId)
-                            .toList();
-                      }
-                    }),
-                onAdd: (value) => context
-                    .read<TodoCubit>()
-                    .createCategory(TodoCategory(name: value)))
+                  selectedCategory = value;
+                  if (value == '*') {
+                    filteredTodos = widget.todos;
+                  } else {
+                    final valueId = widget.categories
+                        .firstWhere((category) => category.name == value)
+                        .id;
+                    filteredTodos = widget.todos
+                        .where((todo) => todo.categoryId == valueId)
+                        .toList();
+                  }
+                }),
+              )
             : const Text('No categories'),
         const Gap(16),
         ...filteredTodos.map((todo) => TodoCard(

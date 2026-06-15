@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mybend/features/babel/models/content.dart';
@@ -139,12 +138,9 @@ class _AddContentScreenState extends State<AddContentScreen> {
             maxLines: 3,
           ),
           const Spacer(),
-          CupertinoButton.filled(
+          FilledButton(
             onPressed: _save,
-            child: Text(
-              'Ajouter',
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
+            child: const Text('Ajouter'),
           ),
           const SizedBox(height: 16),
         ],

@@ -31,7 +31,7 @@ class AlexandrieScreen extends CubitScreen<AlexandrieCubit, DataState> {
                           AlexandrieAddModal(categories: state.data.categories),
                     ).then((value) =>
                         value != null ? cubit.createAlexandrie(value) : null),
-                    child: const Icon(Icons.add, color: Colors.white),
+                    child: const Icon(Icons.add),
                   ),
                 )
               : const SizedBox.shrink();
@@ -83,22 +83,19 @@ class _AlexandrieContentState extends State<AlexandrieContent> {
                 items:
                     widget.categories.map((category) => category.name).toList(),
                 onSelected: (value) => setState(() {
-                      selectedCategory = value;
-                      if (value == '*') {
-                        filteredAlexandries = widget.alexandries;
-                      } else {
-                        final valueId = widget.categories
-                            .firstWhere((category) => category.name == value)
-                            .id;
-                        filteredAlexandries = widget.alexandries
-                            .where((alexandrie) =>
-                                alexandrie.categoryId == valueId)
-                            .toList();
-                      }
-                    }),
-                onAdd: (value) => context
-                    .read<AlexandrieCubit>()
-                    .createCategory(AlexandrieCategory(name: value)))
+                  selectedCategory = value;
+                  if (value == '*') {
+                    filteredAlexandries = widget.alexandries;
+                  } else {
+                    final valueId = widget.categories
+                        .firstWhere((category) => category.name == value)
+                        .id;
+                    filteredAlexandries = widget.alexandries
+                        .where((alexandrie) => alexandrie.categoryId == valueId)
+                        .toList();
+                  }
+                }),
+              )
             : const Text('No categories'),
         const Gap(16),
         ...filteredAlexandries.map((alexandrie) => Text('uiii'))
