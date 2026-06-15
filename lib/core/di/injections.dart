@@ -8,6 +8,7 @@ import 'package:mybend/features/home/home_cubit.dart';
 import 'package:mybend/features/signup/signup_cubit.dart';
 import 'package:mybend/features/todo/todo_cubit.dart';
 import 'package:mybend/core/auth/auth_cubit.dart';
+import 'package:mybend/core/theme/theme_cubit.dart';
 import 'package:mybend/core/data/datasources/auth_datasource.dart';
 import 'package:mybend/core/data/repositories/auth_repository.dart';
 import 'package:mybend/core/data/datasources/babel_datasource.dart';
@@ -26,8 +27,7 @@ void setupDependencyInjection() {
   getIt.registerSingleton<BabelDataSource>(BabelDataSourceImpl());
   getIt.registerSingleton<BabelRepository>(
       BabelRepositoryImpl(getIt<BabelDataSource>()));
-  getIt.registerSingleton<AlexandrieDataSource>(
-      AlexDataSourceImpl.AlexandrieDataSourceImpl());
+  getIt.registerSingleton<AlexandrieDataSource>(AlexandrieDataSourceImpl());
   getIt.registerSingleton<AlexandrieRepository>(
       AlexandrieRepositoryImpl(getIt<AlexandrieDataSource>()));
   getIt.registerSingleton<TodoDataSource>(TodoDataSourceImpl());
@@ -40,6 +40,7 @@ void setupDependencyInjection() {
   getIt.registerSingleton<TmdbRepository>(
       TmdbRepositoryImpl(tmdbDataSource: getIt<TmdbDataSource>()));
   getIt.registerLazySingleton(() => AuthCubit());
+  getIt.registerLazySingleton(() => ThemeCubit());
   //TODO(refactor cubit): move to factory
   //TODO(BUG): page dont reload and crash :(
   getIt.registerLazySingleton(() => SignupCubit());

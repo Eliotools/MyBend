@@ -3,7 +3,6 @@ import 'package:go_router/go_router.dart';
 import 'package:mybend/core/auth/auth_cubit.dart';
 import 'package:mybend/core/di/injections.dart';
 import 'package:mybend/core/navigation/go_router_refresh_stream.dart';
-import 'package:mybend/core/themes/app_theme.dart';
 import 'package:mybend/features/babel/add_content_screen.dart';
 import 'package:mybend/features/babel/babel_screen.dart';
 import 'package:mybend/features/babel/babel_cubit.dart';
@@ -106,7 +105,7 @@ class TmpPage extends StatelessWidget {
         title: Text(title),
       ),
       body: Text(title,
-          style: AppTheme.textTheme.titleMedium?.copyWith(color: Colors.white)),
+          style: Theme.of(context).textTheme.titleMedium),
     );
   }
 }
