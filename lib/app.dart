@@ -16,12 +16,14 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider.value(
-      value: _themeCubit,
-      child: BlocBuilder<ThemeCubit, String>(
-        builder: (context, themeKey) => MaterialApp.router(
-          routerConfig: _router,
-          theme: colorMap[themeKey] ?? darkTheme,
+    return SafeArea(
+      child: BlocProvider.value(
+        value: _themeCubit,
+        child: BlocBuilder<ThemeCubit, String>(
+          builder: (context, themeKey) => MaterialApp.router(
+            routerConfig: _router,
+            theme: colorMap[themeKey] ?? darkTheme,
+          ),
         ),
       ),
     );
