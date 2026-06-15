@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:mybend/shared/ui/theme_toggle_button.dart';
 
 final getIt = GetIt.instance;
 
@@ -25,7 +26,10 @@ abstract class CubitScreen<TCubit extends Cubit<TState>, TState>
         create: (_) => cubit,
         child: BlocBuilder<TCubit, TState>(
             builder: (context, state) => Scaffold(
-                appBar: AppBar(title: Text(name)),
+                appBar: AppBar(
+                  title: Text(name),
+                  actions: const [ThemeToggleButton()],
+                ),
                 floatingActionButton: floatingActionButton?.call(context, state),
                 body: Padding(
                   padding: const EdgeInsets.all(16),

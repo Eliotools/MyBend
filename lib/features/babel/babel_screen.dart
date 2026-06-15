@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mybend/core/extensions/context_extensions.dart';
-import 'package:mybend/core/themes/app_theme.dart';
 import 'package:mybend/features/babel/babel_cubit.dart';
 import 'package:mybend/features/babel/models/content.dart';
 import 'package:mybend/features/babel/widgets/star_rating.dart';
@@ -37,7 +36,7 @@ class BabelScreen extends CubitScreen<BabelCubit, DataState> {
         Error(message: final message) => Center(
             child: Text(
               message,
-              style: AppTheme.textTheme.bodyMedium,
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
           ),
         Loaded<List<Content>>(data: final data) => BabelContent(
@@ -94,7 +93,7 @@ class _BabelContentState extends State<BabelContent> {
             .isEmpty)
           Text(
             'Aucun contenu',
-            style: AppTheme.textTheme.bodyMedium,
+            style: Theme.of(context).textTheme.bodyMedium,
             textAlign: TextAlign.center,
           )
         else
@@ -128,7 +127,7 @@ class _BabelContentState extends State<BabelContent> {
                           children: [
                             Text(
                               content.name,
-                              style: AppTheme.textTheme.titleMedium,
+                              style: Theme.of(context).textTheme.titleMedium,
                             ),
                             Container(
                               padding: const EdgeInsets.symmetric(
@@ -142,7 +141,7 @@ class _BabelContentState extends State<BabelContent> {
                               ),
                               child: Text(
                                 content.status.label,
-                                style: AppTheme.textTheme.labelSmall,
+                                style: Theme.of(context).textTheme.labelSmall,
                               ),
                             ),
                           ],
@@ -159,7 +158,7 @@ class _BabelContentState extends State<BabelContent> {
                           const SizedBox(height: 4),
                           Text(
                             content.comment!,
-                            style: AppTheme.textTheme.bodySmall,
+                            style: Theme.of(context).textTheme.bodySmall,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),

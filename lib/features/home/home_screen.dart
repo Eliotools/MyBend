@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mybend/core/themes/app_theme.dart';
 import 'package:mybend/features/home/home_cubit.dart';
 import 'package:mybend/shared/cubit_screen.dart';
 import 'package:mybend/shared/ui/custom_container.dart';
@@ -20,7 +19,7 @@ class HomeScreen extends CubitScreen<HomeCubit, DataState> {
         children: [
           Text(
             'Bonjour',
-            style: AppTheme.textTheme.titleMedium,
+            style: Theme.of(context).textTheme.titleMedium,
             textAlign: TextAlign.center,
           ),
           const Gap(24),

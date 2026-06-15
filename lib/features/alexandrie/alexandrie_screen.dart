@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mybend/core/themes/app_theme.dart';
 import 'package:mybend/features/alexandrie/models/alexandrie_category.dart';
 import 'package:mybend/features/alexandrie/models/alexandrie_item.dart';
 import 'package:mybend/features/alexandrie/alexandrie_cubit.dart';
@@ -43,7 +42,7 @@ class AlexandrieScreen extends CubitScreen<AlexandrieCubit, DataState> {
             child: CircularProgressIndicator(),
           ),
         Error(message: final message) => Center(
-            child: Text(message, style: AppTheme.textTheme.bodyMedium),
+            child: Text(message, style: Theme.of(context).textTheme.bodyMedium),
           ),
         Loaded<AlexandrieLoadDto>(data: final data) => AlexandrieContent(
             alexandries: data.alexandries,

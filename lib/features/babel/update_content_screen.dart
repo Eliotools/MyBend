@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mybend/core/themes/app_theme.dart';
 import 'package:mybend/features/babel/models/content.dart';
 import 'package:mybend/features/babel/widgets/movie_poster_preview.dart';
 import 'package:mybend/features/babel/widgets/star_rating.dart';
@@ -152,7 +151,7 @@ class _UpdateContentScreenState extends State<UpdateContentScreen> {
                             child: Text(
                               status.label,
                               textAlign: TextAlign.center,
-                              style: AppTheme.textTheme.bodyMedium,
+                              style: Theme.of(context).textTheme.bodyMedium,
                             ),
                           ),
                         ),
@@ -173,7 +172,7 @@ class _UpdateContentScreenState extends State<UpdateContentScreen> {
             onPressed: _save,
             child: Text(
               'Modifier',
-              style: AppTheme.textTheme.bodyMedium,
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
           ),
         ],

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mybend/core/themes/app_theme.dart';
 import 'package:mybend/features/todo/models/todo_category.dart';
 import 'package:mybend/features/todo/models/todo_item.dart';
 import 'package:mybend/features/todo/todo_cubit.dart';
@@ -44,7 +43,7 @@ class TodoScreen extends CubitScreen<TodoCubit, DataState> {
             child: CircularProgressIndicator(),
           ),
         Error(message: final message) => Center(
-            child: Text(message, style: AppTheme.textTheme.bodyMedium),
+            child: Text(message, style: Theme.of(context).textTheme.bodyMedium),
           ),
         Loaded<TodoLoadDto>(data: final data) => TodoContent(
             todos: data.todos,
