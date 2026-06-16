@@ -5,6 +5,7 @@ import 'package:mybend/features/babel/usecases/add_babel_content_usecase.dart';
 import 'package:mybend/features/babel/usecases/get_babel_contents_usecase.dart';
 import 'package:mybend/features/babel/usecases/update_babel_content_usecase.dart';
 import 'package:mybend/features/babel/models/content.dart';
+import 'package:mybend/shared/call_and_load.dart';
 import 'package:mybend/src/shared/data_state.dart';
 
 class BabelCubit extends Cubit<DataState> {
@@ -21,15 +22,7 @@ class BabelCubit extends Cubit<DataState> {
   final AddBabelContentUseCase _addBabelContentUseCase;
   final UpdateBabelContentUseCase _updateBabelContentUseCase;
 
-  Future<void> load() async {
-    emit(const Loading());
-    try {
-      final contents = await _getBabelContentsUseCase.call();
-      emit(Loaded(contents));
-    } catch (e) {
-      emit(Error(e.toString()));
-    }
-  }
+  Future<void> load() async => callAndLoad(() => _getBabelContentsUseCase.call(), emit);
 
   Future<void> addContent(Content content) async {
     await _addBabelContentUseCase.call(content);

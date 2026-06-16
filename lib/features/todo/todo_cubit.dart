@@ -37,9 +37,7 @@ class TodoCubit extends Cubit<DataState> {
 
   Future<void> updateTodo(TodoItem todo) async {
     await _todoUpdateUseCase.call(todo);
-    //TODO(refactor): add a silent load method
-    final data = await _todoLoadUseCase.call();
-    emit(Loaded({data}));
+    load();
   }
 
   Future<void> createCategory(TodoCategory category) async {
