@@ -12,7 +12,7 @@ class Loading extends DataState {
 
 class Loaded<T> extends DataState {
   const Loaded(this.data);
-
+  
   final T data;
 }
 

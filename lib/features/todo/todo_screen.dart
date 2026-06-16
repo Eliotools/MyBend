@@ -9,7 +9,6 @@ import 'package:mybend/shared/ui/selector.dart';
 import 'package:mybend/src/shared/data_state.dart';
 import 'package:mybend/features/todo/todo_add_modal.dart';
 import 'package:gap/gap.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TodoScreen extends CubitScreen<TodoCubit, DataState> {
   const TodoScreen({super.key});

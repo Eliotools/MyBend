@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 enum ContentType {
   book('book', Icons.book),
   movie('movie', Icons.movie),
-  jeux('games', Icons.games);
+  game('game', Icons.games);
 
   const ContentType(this.name, this.icon);
 
@@ -24,9 +24,9 @@ enum ContentStatus {
 class Content {
   Content({
     this.id = -1,
-    required this.name,
-    required this.type,
-    required this.time,
+    this.name,
+    this.type = ContentType.book,
+    this.time = 0,
     this.rating = 0,
     this.status = ContentStatus.todo,
     this.comment,
@@ -55,8 +55,30 @@ class Content {
     );
   }
 
+
+  factory Content.empty() => Content();
+
+  Content copyWith({
+   String? name,
+   ContentType? type,
+   int? time,
+   int? rating,
+   ContentStatus? status,
+   String? comment,
+   String? imageUrl,
+  }) => Content(
+    id : id,
+    name : name ?? this.name,
+    type : type ?? this.type,
+    time : time ?? this.time,
+    rating : rating ?? this.rating,
+    status : status ?? this.status,
+    comment : comment ?? this.comment,
+    imageUrl : imageUrl ?? this.imageUrl,
+  );
+
   final int id;
-  final String name;
+  final String? name;
   final ContentType type;
   final int time;
   final int rating;

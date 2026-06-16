@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mybend/features/todo/todo_cubit.dart';
 import 'package:mybend/features/todo/models/todo_category.dart';
 import 'package:mybend/features/todo/models/todo_item.dart';
-import 'package:mybend/shared/ui/m3_sheet.dart';
+import 'package:mybend/shared/ui/modal_bottom_sheet.dart';
 import 'package:mybend/shared/ui/selector.dart';
 
 class TodoAddModal extends StatefulWidget {
@@ -22,7 +22,7 @@ class _TodoAddModalState extends State<TodoAddModal> {
 
   @override
   Widget build(BuildContext context) {
-    return M3Sheet(
+    return ModalBottomSheet(
       title: 'Add Todo',
       children: [
         Selector(

@@ -7,5 +7,7 @@ class AddBabelContentUseCase {
   final BabelRepository _babelRepository;
 
   Future<void> call(Content content) async =>
+    //TODO(security): check content values here and pass map<string, object> instead of content
+
       _babelRepository.addBabelContent(content);
 }

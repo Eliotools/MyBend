@@ -4,6 +4,7 @@ import 'package:mybend/core/data/datasources/local_storage_datasource.dart';
 import 'package:mybend/core/data/datasources/tmdb_datasource.dart';
 import 'package:mybend/core/data/repositories/tmdb_repository.dart';
 import 'package:mybend/features/babel/babel_cubit.dart';
+import 'package:mybend/features/babel/usecases/get_movie_poster_usecase.dart';
 import 'package:mybend/features/home/home_cubit.dart';
 import 'package:mybend/features/signup/signup_cubit.dart';
 import 'package:mybend/features/todo/todo_cubit.dart';
@@ -39,6 +40,7 @@ void setupDependencyInjection() {
   getIt.registerSingleton<TmdbDataSource>(TmdbDataSourceImpl());
   getIt.registerSingleton<TmdbRepository>(
       TmdbRepositoryImpl(tmdbDataSource: getIt<TmdbDataSource>()));
+      getIt.registerSingleton<GetMoviePosterUseCase>(GetMoviePosterUseCase(getIt<TmdbRepository>()));
   getIt.registerLazySingleton(() => AuthCubit());
   getIt.registerLazySingleton(() => ThemeCubit());
   //TODO(refactor cubit): move to factory

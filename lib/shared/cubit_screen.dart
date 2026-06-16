@@ -13,7 +13,8 @@ abstract class CubitScreen<TCubit extends Cubit<TState>, TState>
 
   final String name = 'Pagename';
 
-  Widget Function(BuildContext context, TState state)? get floatingActionButton => null;
+  Widget Function(BuildContext context, TState state)?
+      get floatingActionButton => null;
 
   TCubit get cubit => getIt<TCubit>();
 
@@ -22,18 +23,19 @@ abstract class CubitScreen<TCubit extends Cubit<TState>, TState>
   @override
   Widget build(BuildContext context) {
     onInit?.call(cubit);
-    return BlocProvider<TCubit>(
-        create: (_) => cubit,
-        child: BlocBuilder<TCubit, TState>(
-            builder: (context, state) => Scaffold(
-                appBar: AppBar(
-                  title: Text(name),
-                  actions: const [ThemeToggleButton()],
-                ),
-                floatingActionButton: floatingActionButton?.call(context, state),
-                body: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: buildPage(context, state),
-                ))));
+    return BlocProvider.value(
+      value: cubit,
+      child: BlocBuilder<TCubit, TState>(
+          builder: (context, state) => Scaffold(
+              appBar: AppBar(
+                title: Text(name),
+                actions: const [ThemeToggleButton()],
+              ),
+              floatingActionButton: floatingActionButton?.call(context, state),
+              body: Padding(
+                padding: const EdgeInsets.all(16),
+                child: buildPage(context, state),
+              ))),
+    );
   }
 }

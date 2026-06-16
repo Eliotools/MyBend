@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-class M3Sheet extends StatelessWidget {
-  // TODO(refacor): update this to call the parent func
-  const M3Sheet({
+class ModalBottomSheet extends StatelessWidget {
+  const ModalBottomSheet({
     super.key,
     required this.title,
     required this.children,

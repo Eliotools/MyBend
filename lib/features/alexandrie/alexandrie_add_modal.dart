@@ -3,7 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mybend/features/alexandrie/models/alexandrie_category.dart';
 import 'package:mybend/features/alexandrie/models/alexandrie_item.dart';
-import 'package:mybend/shared/ui/m3_sheet.dart';
+import 'package:mybend/shared/ui/modal_bottom_sheet.dart';
 
 class AlexandrieAddModal extends StatefulWidget {
   const AlexandrieAddModal({super.key, required this.categories});
@@ -18,8 +18,8 @@ class _AlexandrieAddModalState extends State<AlexandrieAddModal> {
   AlexandrieItem alexandrie = AlexandrieItem.empty();
 
   @override
-  Widget build(BuildContext context) {
-    return M3Sheet(
+  Widget build(BuildContext context) =>
+     ModalBottomSheet(
       title: 'Add ',
       children: [
         DropdownMenu<int>(
@@ -63,5 +63,4 @@ class _AlexandrieAddModalState extends State<AlexandrieAddModal> {
         ),
       ],
     );
-  }
 }

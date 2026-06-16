@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mybend/core/extensions/context_extensions.dart';
+import 'package:mybend/features/babel/add_content_modal.dart';
 import 'package:mybend/features/babel/babel_cubit.dart';
 import 'package:mybend/features/babel/models/content.dart';
 import 'package:mybend/features/babel/widgets/star_rating.dart';
@@ -21,9 +22,11 @@ class BabelScreen extends CubitScreen<BabelCubit, DataState> {
   Widget Function(BuildContext context, DataState state)?
       get floatingActionButton => (context, state) => Builder(
             builder: (context) => FloatingActionButton(
-              onPressed: () async {
-                await context.push<bool>('/babel/add');
-              },
+              onPressed: () => showModalBottomSheet<Content>(
+                isScrollControlled: true,
+                context: context,
+                builder: (context) => const AddContentModal(),
+              ).then((value) => value != null ? cubit.addContent(value) : null),
               child: const Icon(Icons.add),
             ),
           );
@@ -41,8 +44,6 @@ class BabelScreen extends CubitScreen<BabelCubit, DataState> {
           ),
         Loaded<List<Content>>(data: final data) => BabelContent(
             contents: data,
-            onContentDoubleTap: (content) =>
-                context.push<bool>('/babel/edit', extra: content),
           ),
         _ => const SizedBox.shrink(),
       };
@@ -53,11 +54,9 @@ class BabelContent extends StatefulWidget {
   const BabelContent({
     super.key,
     required this.contents,
-    required this.onContentDoubleTap,
   });
 
   final List<Content> contents;
-  final void Function(Content content) onContentDoubleTap;
 
   @override
   State<BabelContent> createState() => _BabelContentState();
@@ -65,7 +64,7 @@ class BabelContent extends StatefulWidget {
 
 class _BabelContentState extends State<BabelContent> {
   ContentType selectedType = ContentType.book;
-
+              
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -101,7 +100,13 @@ class _BabelContentState extends State<BabelContent> {
               .where((content) => content.type == selectedType)
               .map(
                 (content) => GestureDetector(
-                  onDoubleTap: () => widget.onContentDoubleTap(content),
+                  onDoubleTap: () => showModalBottomSheet<Content>(
+                    isScrollControlled: true,
+                    context: context,
+                    builder: (context) => AddContentModal(content: content),
+                  ).then((value) => value != null
+                      ? context.read<BabelCubit>().updateContent(value)
+                      : null),
                   child: CustomContainer(
                     color: context.colorScheme.primary.withAlpha(51),
                     child: Column(
@@ -126,7 +131,7 @@ class _BabelContentState extends State<BabelContent> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              content.name,
+                              content.name ?? 'No found',
                               style: Theme.of(context).textTheme.titleMedium,
                             ),
                             Chip(

@@ -1,54 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mybend/features/babel/models/content.dart';
 import 'package:mybend/features/babel/widgets/movie_poster_preview.dart';
 import 'package:mybend/features/babel/widgets/star_rating.dart';
 import 'package:mybend/shared/ui/custom_container.dart';
+import 'package:mybend/shared/ui/modal_bottom_sheet.dart';
+import 'package:wyatt_type_utils/wyatt_type_utils.dart';
 
-class AddContentScreen extends StatefulWidget {
-  const AddContentScreen({super.key, required this.callback});
+class AddContentModal extends StatefulWidget {
+  const AddContentModal({super.key, this.content} );
 
-  final void Function(Content content) callback;
+  final Content? content;
 
   @override
-  State<AddContentScreen> createState() => _AddContentScreenState();
+  State<AddContentModal> createState() => _AddContentModalState();
 }
 
-class _AddContentScreenState extends State<AddContentScreen> {
-  ContentType selectedType = ContentType.book;
-  ContentStatus selectedStatus = ContentStatus.todo;
-  String name = '';
-  String comments = '';
-  int rating = 0;
-  String? imageUrl;
+class _AddContentModalState extends State<AddContentModal> {
+  Content content = Content.empty();
+  final _nameController = TextEditingController();
+  final _commentController = TextEditingController();
 
-  Future<void> _save() async {
-    if (name.trim().isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Veuillez remplir le nom')),
-      );
-      return;
+  @override
+  void initState() {
+    super.initState();
+    if (widget.content.isNotNull) {
+    content = widget.content!;
+    _commentController.text = content.comment ?? '';
+    _nameController.text = content.name ?? '';
     }
-
-    widget.callback(Content(
-      name: name.trim(),
-      type: selectedType,
-      time: DateTime.now().millisecondsSinceEpoch,
-      rating: rating,
-      status: selectedStatus,
-      comment: comments.trim().isEmpty ? null : comments.trim(),
-      imageUrl: selectedType == ContentType.movie ? imageUrl : null,
-    ));
-
-    if (mounted) context.pop(true);
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Add content')),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+  Widget build(BuildContext context)=>  ModalBottomSheet(
+        title: '${widget.content.isNotNull ? 'Update' : 'Add'} Babel',
         children: [
           Row(
             children: ContentType.values
@@ -57,12 +43,12 @@ class _AddContentScreenState extends State<AddContentScreen> {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 4),
                       child: CustomContainer(
-                        selected: selectedType == type,
+                        selected: content.type == type,
                         small: true,
                         child: InkWell(
                           onTap: () => setState(() {
-                            selectedType = type;
-                            if (type != ContentType.movie) imageUrl = null;
+                            content = content.copyWith(type: type);
+                            if (type != ContentType.movie) content.copyWith(imageUrl: null);
                           }),
                           borderRadius: BorderRadius.circular(8),
                           child: Padding(
@@ -83,24 +69,25 @@ class _AddContentScreenState extends State<AddContentScreen> {
           ),
           const SizedBox(height: 24),
           TextField(
+            controller: _nameController,
             onChanged: (value) => setState(() {
-              name = value;
-              if (selectedType != ContentType.movie) imageUrl = null;
+              content = content.copyWith(name: value);
+              if (content.type != ContentType.movie) content = content.copyWith(imageUrl: null);
             }),
             decoration: const InputDecoration(hintText: 'Nom'),
           ),
-          if (selectedType == ContentType.movie) ...[
+          if (content.type == ContentType.movie) ...[
             const SizedBox(height: 16),
             MoviePosterPreview(
-              movieName: name,
-              onPosterUrlChanged: (url) => imageUrl = url,
+              movieName: content.name ?? '',
+              onPosterUrlChanged: (url) => content = content.copyWith(imageUrl: url),
             ),
           ],
           const SizedBox(height: 16),
           Center(
             child: StarRatingButton(
-              rating: rating,
-              onRatingChanged: (value) => setState(() => rating = value),
+              rating: content.rating,
+              onRatingChanged: (value) => setState(() => content = content.copyWith(rating: value)),
             ),
           ),
           const SizedBox(height: 16),
@@ -111,10 +98,10 @@ class _AddContentScreenState extends State<AddContentScreen> {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 4),
                       child: CustomContainer(
-                        selected: selectedStatus == status,
+                        selected: content.status == status,
                         small: true,
                         child: InkWell(
-                          onTap: () => setState(() => selectedStatus = status),
+                          onTap: () => setState(() => content = content.copyWith(status: status)),
                           borderRadius: BorderRadius.circular(8),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 12),
@@ -133,18 +120,17 @@ class _AddContentScreenState extends State<AddContentScreen> {
           ),
           const SizedBox(height: 16),
           TextField(
-            onChanged: (value) => setState(() => comments = value),
+            controller: _commentController,
+            onChanged: (value) => setState(() => content = content.copyWith(comment: value) ),
             decoration: const InputDecoration(hintText: 'Commentaires'),
             maxLines: 3,
           ),
-          const Spacer(),
+        const Gap(16),
           FilledButton(
-            onPressed: _save,
+            onPressed: () => context.pop(content),
             child: const Text('Ajouter'),
           ),
-          const SizedBox(height: 16),
         ],
-      ),
-    );
-  }
+      );
+   
 }
