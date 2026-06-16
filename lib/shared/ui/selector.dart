@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:wyatt_type_utils/wyatt_type_utils.dart';
 
 class Selector extends StatefulWidget {
   const Selector({
@@ -51,6 +52,7 @@ class _SelectorState extends State<Selector> {
             onSubmitted: (_) => _addCategory(),
           ),
           const Gap(12),
+          if (_newItem.isNotNullOrEmpty)
           FilledButton.tonal(
             onPressed:
                 _newItem.isEmpty ? null : () => widget.onAdd?.call(_newItem),

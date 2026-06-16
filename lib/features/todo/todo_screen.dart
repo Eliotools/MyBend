@@ -29,7 +29,7 @@ class TodoScreen extends CubitScreen<TodoCubit, DataState> {
               isScrollControlled: true,
               context: context,
               builder: (context) =>
-                  TodoAddModal(categories: state.data.categories),
+                  TodoAddModal(categories: state.data.categories, createCategory: cubit.createCategory,),
             ).then((value) => value != null ? cubit.createTodo(value) : null),
             child: const Icon(Icons.add),
           ),

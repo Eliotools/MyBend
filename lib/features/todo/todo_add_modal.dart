@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mybend/features/todo/todo_cubit.dart';
 import 'package:mybend/features/todo/models/todo_category.dart';
 import 'package:mybend/features/todo/models/todo_item.dart';
 import 'package:mybend/shared/ui/modal_bottom_sheet.dart';
 import 'package:mybend/shared/ui/selector.dart';
 
 class TodoAddModal extends StatefulWidget {
-  const TodoAddModal({super.key, required this.categories});
+  const TodoAddModal({super.key, required this.categories, required this.createCategory});
 
   final List<TodoCategory> categories;
+  final void Function(TodoCategory  value) createCategory;
 
   @override
   State<TodoAddModal> createState() => _TodoAddModalState();
@@ -29,10 +28,8 @@ class _TodoAddModalState extends State<TodoAddModal> {
           selectedItem: todo.categoryId?.toString() ?? '*',
           items: widget.categories.map((category) => category.name).toList(),
           onSelected: (value) => setState(
-              () => todo = todo.copyWith(categoryId: int.parse(value))),
-          onAdd: (value) => context
-              .read<TodoCubit>()
-              .createCategory(TodoCategory(name: value)),
+              () => todo = todo.copyWith(categoryId: getIdWithCategoryName(value))),
+          onAdd: (value) => widget.createCategory(TodoCategory(name: value))
         ),
         const Gap(12),
         TextField(
@@ -55,4 +52,6 @@ class _TodoAddModalState extends State<TodoAddModal> {
       ],
     );
   }
+
+  int getIdWithCategoryName(String value) => widget.categories.firstWhere((c) => c.name == value).id;
 }
