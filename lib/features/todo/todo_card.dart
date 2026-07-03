@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mybend/core/extensions/context_extensions.dart';
 import 'package:mybend/features/todo/todo_add_modal.dart';
 import 'package:mybend/features/todo/todo_cubit.dart';
 import 'package:mybend/features/todo/models/todo_item.dart';
@@ -25,15 +26,15 @@ class TodoCard extends StatelessWidget {
           : null,
       onLongPress: () => todo.validated
           ? context.read<TodoCubit>().archiveTodo(todo)
-          : showModalBottomSheet<TodoItem?>(
-              isScrollControlled: true,
-              context: context,
-              builder: (_) => BlocProvider.value(
-                  value: context.read<TodoCubit>(),
-                  child: TodoAddModal(todo: todo)),
-            ).then((value) => value != null
-              ? context.read<TodoCubit>().updateTodo(value)
-              : null),
+          : context
+              .showModalBS<TodoCubit, TodoItem?>(
+                builder: (_) => TodoAddModal(todo: todo),
+              )
+              .then(
+                (value) => value != null
+                    ? context.read<TodoCubit>().updateTodo(value)
+                    : null,
+              ),
       onTap: () => context
           .read<TodoCubit>()
           .updateTodo(todo.copyWith(validated: !todo.validated)),

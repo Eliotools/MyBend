@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mybend/core/di/injections.dart';
 import 'package:mybend/features/todo/models/todo_category.dart';
 import 'package:mybend/features/todo/models/todo_item.dart';
 import 'package:mybend/features/todo/todo_cubit.dart';

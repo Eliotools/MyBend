@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mybend/core/extensions/context_extensions.dart';
 import 'package:mybend/features/todo/models/todo_item.dart';
 import 'package:mybend/features/todo/todo_cubit.dart';
 import 'package:mybend/features/todo/usecases/toto_load.dart';
@@ -25,11 +26,13 @@ class TodoScreen extends CubitScreen<TodoCubit, DataState> {
           is Loaded<TodoLoadDto>
       ? Builder(
           builder: (context) => FloatingActionButton(
-            onPressed: () => showModalBottomSheet<TodoItem?>(
-              isScrollControlled: true,
-              context: context,
-              builder: (context) => const TodoAddModal(),
-            ).then((value) => value != null ? cubit.createTodo(value) : null),
+            onPressed: () => context
+                .showModalBS<TodoCubit, TodoItem?>(
+                  builder: (_) => const TodoAddModal(),
+                )
+                .then(
+                  (value) => value != null ? cubit.createTodo(value) : null,
+                ),
             child: const Icon(Icons.add),
           ),
         )
