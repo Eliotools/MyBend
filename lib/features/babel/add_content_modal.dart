@@ -9,7 +9,7 @@ import 'package:mybend/shared/ui/modal_bottom_sheet.dart';
 import 'package:wyatt_type_utils/wyatt_type_utils.dart';
 
 class AddContentModal extends StatefulWidget {
-  const AddContentModal({super.key, this.content} );
+  const AddContentModal({super.key, this.content});
 
   final Content? content;
 
@@ -26,14 +26,14 @@ class _AddContentModalState extends State<AddContentModal> {
   void initState() {
     super.initState();
     if (widget.content.isNotNull) {
-    content = widget.content!;
-    _commentController.text = content.comment ?? '';
-    _nameController.text = content.name ?? '';
+      content = widget.content!;
+      _commentController.text = content.comment ?? '';
+      _nameController.text = content.name ?? '';
     }
   }
 
   @override
-  Widget build(BuildContext context)=>  ModalBottomSheet(
+  Widget build(BuildContext context) => ModalBottomSheet(
         title: '${widget.content.isNotNull ? 'Update' : 'Add'} Babel',
         children: [
           Row(
@@ -48,7 +48,9 @@ class _AddContentModalState extends State<AddContentModal> {
                         child: InkWell(
                           onTap: () => setState(() {
                             content = content.copyWith(type: type);
-                            if (type != ContentType.movie) content.copyWith(imageUrl: null);
+                            if (type != ContentType.movie) {
+                              content.copyWith(imageUrl: null);
+                            }
                           }),
                           borderRadius: BorderRadius.circular(8),
                           child: Padding(
@@ -72,7 +74,9 @@ class _AddContentModalState extends State<AddContentModal> {
             controller: _nameController,
             onChanged: (value) => setState(() {
               content = content.copyWith(name: value);
-              if (content.type != ContentType.movie) content = content.copyWith(imageUrl: null);
+              if (content.type != ContentType.movie) {
+                content = content.copyWith(imageUrl: null);
+              }
             }),
             decoration: const InputDecoration(hintText: 'Nom'),
           ),
@@ -80,14 +84,16 @@ class _AddContentModalState extends State<AddContentModal> {
             const SizedBox(height: 16),
             MoviePosterPreview(
               movieName: content.name ?? '',
-              onPosterUrlChanged: (url) => content = content.copyWith(imageUrl: url),
+              onPosterUrlChanged: (url) =>
+                  content = content.copyWith(imageUrl: url),
             ),
           ],
           const SizedBox(height: 16),
           Center(
             child: StarRatingButton(
               rating: content.rating,
-              onRatingChanged: (value) => setState(() => content = content.copyWith(rating: value)),
+              onRatingChanged: (value) =>
+                  setState(() => content = content.copyWith(rating: value)),
             ),
           ),
           const SizedBox(height: 16),
@@ -101,7 +107,8 @@ class _AddContentModalState extends State<AddContentModal> {
                         selected: content.status == status,
                         small: true,
                         child: InkWell(
-                          onTap: () => setState(() => content = content.copyWith(status: status)),
+                          onTap: () => setState(
+                              () => content = content.copyWith(status: status)),
                           borderRadius: BorderRadius.circular(8),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 12),
@@ -121,16 +128,16 @@ class _AddContentModalState extends State<AddContentModal> {
           const SizedBox(height: 16),
           TextField(
             controller: _commentController,
-            onChanged: (value) => setState(() => content = content.copyWith(comment: value) ),
+            onChanged: (value) =>
+                setState(() => content = content.copyWith(comment: value)),
             decoration: const InputDecoration(hintText: 'Commentaires'),
             maxLines: 3,
           ),
-        const Gap(16),
+          const Gap(16),
           FilledButton(
             onPressed: () => context.pop(content),
-            child: const Text('Ajouter'),
+            child: Text(widget.content.isNotNull ? 'Update' : 'Add'),
           ),
         ],
       );
-   
 }

@@ -27,6 +27,7 @@ class TodoCubit extends Cubit<DataState> {
   final TodoCreateCategoryUseCase _todoCreateCategoryUseCase;
   final TodoArchiveUseCase _todoArchiveUseCase;
 
+
   Future<void> load() async => callAndLoad(() => _todoLoadUseCase.call(), emit);
 
   Future<void> createTodo(TodoItem todo) async {

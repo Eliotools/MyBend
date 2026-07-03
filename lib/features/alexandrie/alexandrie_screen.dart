@@ -27,7 +27,7 @@ class AlexandrieScreen extends CubitScreen<AlexandrieCubit, DataState> {
                       isScrollControlled: true,
                       context: context,
                       builder: (context) =>
-                          AlexandrieAddModal(categories: state.data.categories),
+                          AlexandrieAddModal(categories: state.data.categories,  createCategory: cubit.createCategory),
                     ).then((value) =>
                         value != null ? cubit.createAlexandrie(value) : null),
                     child: const Icon(Icons.add),
@@ -76,8 +76,7 @@ class _AlexandrieContentState extends State<AlexandrieContent> {
   @override
   Widget build(BuildContext context) =>
       ListView(scrollDirection: Axis.vertical, children: [
-        widget.categories.isNotEmpty
-            ? Selector(
+         Selector(
                 selectedItem: selectedCategory ?? '*',
                 items:
                     widget.categories.map((category) => category.name).toList(),
@@ -94,8 +93,7 @@ class _AlexandrieContentState extends State<AlexandrieContent> {
                         .toList();
                   }
                 }),
-              )
-            : const Text('No categories'),
+              ),
         const Gap(16),
         ...filteredAlexandries.map((alexandrie) => Text('uiii'))
       ]);

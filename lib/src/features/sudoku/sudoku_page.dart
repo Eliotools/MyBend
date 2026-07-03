@@ -98,7 +98,7 @@ class SudokuPageState extends State<SudokuPage> {
                                   height: MediaQuery.of(context).size.width / 9,
                                   decoration: BoxDecoration(
                                       border: getBorder(index),
-                                      color: Colors.grey.withOpacity(0.2)),
+                                      color: Colors.grey.withValues(alpha: 0.2)),
                                   child: Align(child: Text('${index + 1}')))),
                         ),
                       ),
@@ -115,14 +115,14 @@ class SudokuPageState extends State<SudokuPage> {
                 color: selected == null
                     ? null
                     : selected == index
-                        ? Colors.red.withOpacity(0.1)
+                        ? Colors.red.withValues(alpha: 0.1)
                         : getRow(index) == getRow(selected!) ||
                                 getCol(index) == getCol(selected!)
-                            ? Colors.blue.withOpacity(0.2)
+                            ? Colors.blue.withValues(alpha: 0.2)
                             : currentSudoku![index] != '0' &&
                                     currentSudoku![index] ==
                                         currentSudoku![selected!]
-                                ? Colors.green.withOpacity(0.1)
+                                ? Colors.green.withValues(alpha: 0.1)
                                 : null),
             child: Align(
                 child: Text(currentSudoku![index] == '0'

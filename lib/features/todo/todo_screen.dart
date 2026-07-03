@@ -5,7 +5,7 @@ import 'package:mybend/features/todo/todo_cubit.dart';
 import 'package:mybend/features/todo/usecases/toto_load.dart';
 import 'package:mybend/shared/cubit_screen.dart';
 import 'package:mybend/features/todo/todo_card.dart';
-import 'package:mybend/shared/ui/selector.dart';
+import 'package:mybend/shared/ui/custom_container.dart';
 import 'package:mybend/src/shared/data_state.dart';
 import 'package:mybend/features/todo/todo_add_modal.dart';
 import 'package:gap/gap.dart';
@@ -28,8 +28,10 @@ class TodoScreen extends CubitScreen<TodoCubit, DataState> {
             onPressed: () => showModalBottomSheet<TodoItem?>(
               isScrollControlled: true,
               context: context,
-              builder: (context) =>
-                  TodoAddModal(categories: state.data.categories, createCategory: cubit.createCategory,),
+              builder: (context) => TodoAddModal(
+                categories: state.data.categories,
+                createCategory: cubit.createCategory,
+              ),
             ).then((value) => value != null ? cubit.createTodo(value) : null),
             child: const Icon(Icons.add),
           ),
@@ -64,7 +66,7 @@ class TodoContent extends StatefulWidget {
 }
 
 class _TodoContentState extends State<TodoContent> {
-  String? selectedCategory;
+  Set<int> selectedCategories = {};
   List<TodoItem> filteredTodos = [];
 
   @override
@@ -77,28 +79,34 @@ class _TodoContentState extends State<TodoContent> {
   Widget build(BuildContext context) =>
       ListView(scrollDirection: Axis.vertical, children: [
         widget.categories.isNotEmpty
-            ? Selector(
-                selectedItem: selectedCategory ?? '*',
-                items:
-                    widget.categories.map((category) => category.name).toList(),
-                onSelected: (value) => setState(() {
-                  selectedCategory = value;
-                  if (value == '*') {
-                    filteredTodos = widget.todos;
-                  } else {
-                    final valueId = widget.categories
-                        .firstWhere((category) => category.name == value)
-                        .id;
-                    filteredTodos = widget.todos
-                        .where((todo) => todo.categoryId == valueId)
-                        .toList();
-                  }
-                }),
+            ? SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: widget.categories
+                      .map((category) => CustomContainer(
+                            selected: selectedCategories.contains(category.id),
+                            child: InkWell(
+                              onTap: () => setState(() {
+                                selectedCategories.contains(category.id)
+                                    ? selectedCategories.remove(category.id)
+                                    : selectedCategories.add(category.id);
+                                filteredTodos = widget.todos
+                                    .where((todo) =>
+                                        selectedCategories.isEmpty ||
+                                        selectedCategories
+                                            .contains(todo.categoryId))
+                                    .toList();
+                              }),
+                              child: SizedBox(
+                                  width: 80,
+                                  child: Center(child: Text(category.name))),
+                            ),
+                          ))
+                      .toList(),
+                ),
               )
             : const Text('No categories'),
         const Gap(16),
-        ...filteredTodos.map((todo) => TodoCard(
-              todo: todo,
-            ))
+        ...filteredTodos.map((todo) => TodoCard(todo: todo)),
       ]);
 }
