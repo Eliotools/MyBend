@@ -27,8 +27,15 @@ class TodoCubit extends Cubit<DataState> {
   final TodoCreateCategoryUseCase _todoCreateCategoryUseCase;
   final TodoArchiveUseCase _todoArchiveUseCase;
 
+  TodoLoadDto? prevState;
 
-  Future<void> load() async => callAndLoad(() => _todoLoadUseCase.call(), emit);
+  Future<void> load() async => callAndLoad(
+      () => _todoLoadUseCase.call().then((value) {
+            value.selectedCategories = prevState?.selectedCategories ?? [];
+            prevState = value;
+            return value;
+          }),
+      emit);
 
   Future<void> createTodo(TodoItem todo) async {
     await _todoCreateUseCase.call(todo);
@@ -48,5 +55,15 @@ class TodoCubit extends Cubit<DataState> {
   Future<void> archiveTodo(TodoItem todo) async {
     await _todoArchiveUseCase.call(todo);
     load();
+  }
+
+  void selectCategory(TodoCategory category) {
+    if (prevState != null) {
+      if (prevState!.selectedCategories.contains(category)) {
+        prevState!.selectedCategories.remove(category);
+      } else {
+        prevState!.selectedCategories.add(category);
+      }
+    }
   }
 }

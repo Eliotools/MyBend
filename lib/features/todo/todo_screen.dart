@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mybend/features/todo/models/todo_category.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mybend/features/todo/models/todo_item.dart';
 import 'package:mybend/features/todo/todo_cubit.dart';
 import 'package:mybend/features/todo/usecases/toto_load.dart';
@@ -28,10 +28,7 @@ class TodoScreen extends CubitScreen<TodoCubit, DataState> {
             onPressed: () => showModalBottomSheet<TodoItem?>(
               isScrollControlled: true,
               context: context,
-              builder: (context) => TodoAddModal(
-                categories: state.data.categories,
-                createCategory: cubit.createCategory,
-              ),
+              builder: (context) => const TodoAddModal(),
             ).then((value) => value != null ? cubit.createTodo(value) : null),
             child: const Icon(Icons.add),
           ),
@@ -47,8 +44,7 @@ class TodoScreen extends CubitScreen<TodoCubit, DataState> {
             child: Text(message, style: Theme.of(context).textTheme.bodyMedium),
           ),
         Loaded<TodoLoadDto>(data: final data) => TodoContent(
-            todos: data.todos,
-            categories: data.categories,
+            state: data,
           ),
         _ => const SizedBox.shrink(),
       };
@@ -56,47 +52,42 @@ class TodoScreen extends CubitScreen<TodoCubit, DataState> {
 
 //TODO(refactor): move to separate file
 class TodoContent extends StatefulWidget {
-  const TodoContent({super.key, required this.todos, required this.categories});
+  const TodoContent({super.key, required this.state});
 
-  final List<TodoItem> todos;
-  final List<TodoCategory> categories;
+  final TodoLoadDto state;
 
   @override
   State<TodoContent> createState() => _TodoContentState();
 }
 
 class _TodoContentState extends State<TodoContent> {
-  Set<int> selectedCategories = {};
   List<TodoItem> filteredTodos = [];
 
   @override
   void initState() {
     super.initState();
-    filteredTodos = widget.todos;
+    filteredTodos = filterTodos(widget.state);
   }
 
   @override
   Widget build(BuildContext context) =>
       ListView(scrollDirection: Axis.vertical, children: [
-        widget.categories.isNotEmpty
+        widget.state.categories.isNotEmpty
             ? SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
-                  children: widget.categories
+                  children: widget.state.categories
                       .map((category) => CustomContainer(
-                            selected: selectedCategories.contains(category.id),
+                            selected: widget.state.selectedCategories
+                                .contains(category),
                             child: InkWell(
-                              onTap: () => setState(() {
-                                selectedCategories.contains(category.id)
-                                    ? selectedCategories.remove(category.id)
-                                    : selectedCategories.add(category.id);
-                                filteredTodos = widget.todos
-                                    .where((todo) =>
-                                        selectedCategories.isEmpty ||
-                                        selectedCategories
-                                            .contains(todo.categoryId))
-                                    .toList();
-                              }),
+                              onTap: () {
+                                context
+                                    .read<TodoCubit>()
+                                    .selectCategory(category);
+                                setState(() =>
+                                    filteredTodos = filterTodos(widget.state));
+                              },
                               child: SizedBox(
                                   width: 80,
                                   child: Center(child: Text(category.name))),
@@ -109,4 +100,16 @@ class _TodoContentState extends State<TodoContent> {
         const Gap(16),
         ...filteredTodos.map((todo) => TodoCard(todo: todo)),
       ]);
+}
+
+List<TodoItem> filterTodos(TodoLoadDto state) {
+  if (state.selectedCategories.isEmpty) {
+    return state.todos;
+  }
+  List<int> categoryIds =
+      state.selectedCategories.map((category) => category.id).toList();
+
+  return state.todos
+      .where((todo) => categoryIds.contains(todo.categoryId))
+      .toList();
 }

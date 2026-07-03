@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mybend/features/todo/todo_add_modal.dart';
 import 'package:mybend/features/todo/todo_cubit.dart';
 import 'package:mybend/features/todo/models/todo_item.dart';
+import 'package:wyatt_type_utils/wyatt_type_utils.dart';
 
 class TodoCard extends StatelessWidget {
   const TodoCard({super.key, required this.todo});
@@ -15,6 +16,7 @@ class TodoCard extends StatelessWidget {
       contentPadding: EdgeInsets.zero,
       leading: Icon(
         todo.validated ? Icons.check_circle : Icons.circle_outlined,
+        color: todo.categoryId.isNull ? Colors.blue : null,
       ),
       title: Text(todo.name),
       subtitle: todo.description?.isNotEmpty ?? false
@@ -26,7 +28,9 @@ class TodoCard extends StatelessWidget {
           : showModalBottomSheet<TodoItem?>(
               isScrollControlled: true,
               context: context,
-              builder: (context) => TodoAddModal(todo: todo),
+              builder: (_) => BlocProvider.value(
+                  value: context.read<TodoCubit>(),
+                  child: TodoAddModal(todo: todo)),
             ).then((value) => value != null
               ? context.read<TodoCubit>().updateTodo(value)
               : null),

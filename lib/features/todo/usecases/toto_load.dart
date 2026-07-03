@@ -3,10 +3,14 @@ import 'package:mybend/features/todo/models/todo_item.dart';
 import 'package:mybend/features/todo/models/todo_category.dart';
 
 class TodoLoadDto {
-  TodoLoadDto({required this.todos, required this.categories});
+  TodoLoadDto(
+      {required this.todos,
+      required this.categories,
+      this.selectedCategories = const []});
 
   final List<TodoItem> todos;
   final List<TodoCategory> categories;
+  List<TodoCategory> selectedCategories;
 }
 
 class TodoLoadUseCase {
